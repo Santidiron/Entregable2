@@ -1,43 +1,112 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mxfile host="app.diagrams.net">
-    <diagram id="1d2d3d4d5d6d7d8d9d0d1d2d3d4d5d6d7d8d9d0d1">
-        <mxGraphModel dx="827" dy="646" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1162" math="0" shadow="0">
-            <root>
-                <mxCell id="0" parent="">
-                    <mxCell id="1" parent="0"/>
-                    <!-- Domain Classes -->
-                    <mxCell id="area" value="<b>Area</b>\n- privateField1\n- privateField2\n\n<b>Methods</b>\n+ publicMethod1\n+ publicMethod2" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=blue;fillColor=lightblue;" vertex="1" parent="1"/> 
-                    <mxCell id="manager" value="<b>Manager</b>\n- privateField1\n\n<b>Methods</b>\n+ publicMethod1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=green;fillColor=lightgreen;" vertex="1" parent="1"/> 
-                    <mxCell id="empleado" value="<b>Empleado</b>\n- privateField1\n\n<b>Methods</b>\n+ publicMethod1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=yellow;fillColor=lightyellow;" vertex="1" parent="1"/>
-                    <mxCell id="movimiento" value="<b>Movimiento</b>\n- privateField1\n\n<b>Methods</b>\n+ publicMethod1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=blue;fillColor=lightblue;" vertex="1" parent="1"/>
-                    <mxCell id="sistema" value="<b>Sistema</b>\n- privateField1\n\n<b>Methods</b>\n+ publicMethod1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=blue;fillColor=lightblue;" vertex="1" parent="1"/>
-                    <mxCell id="gestorcv" value="<b>GestorCV</b>\n- privateField1\n\n<b>Methods</b>\n+ publicMethod1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=orange;fillColor=lightorange;" vertex="1" parent="1"/>
-                    <mxCell id="persistencia" value="<b>Persistencia</b>\n- privateField1\n\n<b>Methods</b>\n+ publicMethod1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=orange;fillColor=lightorange;" vertex="1" parent="1"/>
-                    <mxCell id="geminiservice" value="<b>GeminiService</b>\n- privateField1\n\n<b>Methods</b>\n+ publicMethod1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=orange;fillColor=lightorange;" vertex="1" parent="1"/>
-                    <mxCell id="ventanabienvenida" value="<b>VentanaBienvenida</b>\n- privateField1\n\n<b>Methods</b>\n+ publicMethod1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=gray;fillColor=lightgray;" vertex="1" parent="1"/>
-                    <mxCell id="ventanaprincipal" value="<b>VentanaPrincipal</b>\n- privateField1\n\n<b>Methods</b>\n+ publicMethod1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=gray;fillColor=lightgray;" vertex="1" parent="1"/>
-                    <mxCell id="ventanaabmareas" value="<b>VentanaABMAreas</b>\n- privateField1\n\n<b>Methods</b>\n+ publicMethod1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=gray;fillColor=lightgray;" vertex="1" parent="1"/>
-                    <mxCell id="dialogomovimiento" value="<b>DialogoMovimiento</b>\n- privateField1\n\n<b>Methods</b>\n+ publicMethod1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=gray;fillColor=lightgray;" vertex="1" parent="1"/>
-                    <mxCell id="ventanaabmanagers" value="<b>VentanaABMManagers</b>\n- privateField1\n\n<b>Methods</b>\n+ publicMethod1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=gray;fillColor=lightgray;" vertex="1" parent="1"/>
-                    <mxCell id="ventanaaltaempleados" value="<b>VentanaAltaEmpleados</b>\n- privateField1\n\n<b>Methods</b>\n+ publicMethod1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=gray;fillColor=lightgray;" vertex="1" parent="1"/>
-                    <mxCell id="ventanareporteinteligente" value="<b>VentanaReporteInteligente</b>\n- privateField1\n\n<b>Methods</b>\n+ publicMethod1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=gray;fillColor=lightgray;" vertex="1" parent="1"/>
-                    <mxCell id="ventanareporteestado" value="<b>VentanaReporteEstado</b>\n- privateField1\n\n<b>Methods</b>\n+ publicMethod1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=gray;fillColor=lightgray;" vertex="1" parent="1"/>
-                    <mxCell id="ventanareportemovimientos" value="<b>VentanaReporteMovimientos</b>\n- privateField1\n\n<b>Methods</b>\n+ publicMethod1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=gray;fillColor=lightgray;" vertex="1" parent="1"/>
-                </mxCell>
-                <!-- Relationships -->
-                <!-- Composition between Sistema and domain classes -->
-                <mxCell id="sistema-area" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=blockThin;strokeColor=black;" edge="1" parent="1" source="sistema" target="area"/>
-                <mxCell id="sistema-manager" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=blockThin;strokeColor=black;" edge="1" parent="1" source="sistema" target="manager"/>
-                <mxCell id="sistema-empleado" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=blockThin;strokeColor=black;" edge="1" parent="1" source="sistema" target="empleado"/>
-                <!-- Associations -->
-                <mxCell id="empleado-manager" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=blockThin;strokeColor=black;" edge="1" parent="1" source="empleado" target="manager"/>
-                <mxCell id="empleado-area" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=blockThin;strokeColor=black;" edge="1" parent="1" source="empleado" target="area"/>
-                <!-- Dependencies from GUI classes to Sistema -->
-                <mxCell id="ventanaabmanagers-sistema" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=blockThin;strokeColor=black;" edge="1" parent="1" source="ventanaabmanagers" target="sistema"/>
-                <mxCell id="ventanabienvenida-sistema" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=blockThin;strokeColor=black;" edge="1" parent="1" source="ventanabienvenida" target="sistema"/>
-                <mxCell id="ventanaprincipal-sistema" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=blockThin;strokeColor=black;" edge="1" parent="1" source="ventanaprincipal" target="sistema"/>
-                
-            </root>
-        </mxGraphModel>
-    </diagram>
+<mxfile host="app.diagrams.net" modified="2025-11-03T21:22:42.000Z" agent="GitHub Copilot" version="24.0.0" type="device">
+  <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- Domain Layer Classes -->
+        <mxCell id="area" value="Area&#xa;&#xa;- id: int&#xa;- nombre: String&#xa;- descripcion: String&#xa;&#xa;+ Area()&#xa;+ getId(): int&#xa;+ setId(int): void&#xa;+ getNombre(): String&#xa;+ setNombre(String): void" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="80" y="280" width="200" height="180" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="manager" value="Manager&#xa;&#xa;- id: int&#xa;- nombre: String&#xa;- apellido: String&#xa;- dni: String&#xa;&#xa;+ Manager()&#xa;+ getId(): int&#xa;+ getNombre(): String&#xa;+ getDni(): String" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="320" y="280" width="200" height="180" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="empleado" value="Empleado&#xa;&#xa;- legajo: int&#xa;- nombre: String&#xa;- apellido: String&#xa;- dni: String&#xa;- area: Area&#xa;- manager: Manager&#xa;&#xa;+ Empleado()&#xa;+ getLegajo(): int&#xa;+ getArea(): Area&#xa;+ getManager(): Manager" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="560" y="280" width="200" height="220" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="movimiento" value="Movimiento&#xa;&#xa;- fecha: Date&#xa;- tipo: String&#xa;- empleado: Empleado&#xa;- areaDestino: Area&#xa;&#xa;+ Movimiento()&#xa;+ getFecha(): Date&#xa;+ getTipo(): String&#xa;+ getEmpleado(): Empleado" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="800" y="280" width="200" height="200" as="geometry" />
+        </mxCell>
+        
+        <!-- Business Logic Layer -->
+        <mxCell id="sistema" value="Sistema&#xa;&#xa;- areas: List&lt;Area&gt;&#xa;- managers: List&lt;Manager&gt;&#xa;- empleados: List&lt;Empleado&gt;&#xa;- movimientos: List&lt;Movimiento&gt;&#xa;&#xa;+ Sistema()&#xa;+ agregarArea(Area): void&#xa;+ agregarManager(Manager): void&#xa;+ registrarEmpleado(Empleado): void&#xa;+ registrarMovimiento(Movimiento): void&#xa;+ getAreas(): List&lt;Area&gt;&#xa;+ getManagers(): List&lt;Manager&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="400" y="40" width="250" height="200" as="geometry" />
+        </mxCell>
+        
+        <!-- Service Layer -->
+        <mxCell id="gestorcv" value="GestorCV&#xa;&#xa;- geminiService: GeminiService&#xa;&#xa;+ GestorCV()&#xa;+ procesarCV(File): Empleado&#xa;+ extraerDatos(String): Map" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="80" y="520" width="220" height="140" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="geminiservice" value="GeminiService&#xa;&#xa;- apiKey: String&#xa;- client: HttpClient&#xa;&#xa;+ GeminiService()&#xa;+ analizarTexto(String): String&#xa;+ generarReporte(String): String" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="330" y="520" width="220" height="140" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="persistencia" value="Persistencia&#xa;&#xa;+ Persistencia()&#xa;+ guardarDatos(String, Object): void&#xa;+ cargarDatos(String): Object&#xa;+ existeArchivo(String): boolean" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="580" y="520" width="220" height="120" as="geometry" />
+        </mxCell>
+        
+        <!-- Presentation Layer (GUI) -->
+        <mxCell id="ventanabienvenida" value="VentanaBienvenida&#xa;&#xa;- sistema: Sistema&#xa;&#xa;+ VentanaBienvenida()&#xa;+ mostrar(): void" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="840" y="40" width="200" height="100" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="ventanaprincipal" value="VentanaPrincipal&#xa;&#xa;- sistema: Sistema&#xa;&#xa;+ VentanaPrincipal()&#xa;+ inicializar(): void" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="840" y="160" width="200" height="100" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="ventanaabmareas" value="VentanaABMAreas&#xa;&#xa;- sistema: Sistema&#xa;&#xa;+ VentanaABMAreas()&#xa;+ agregarArea(): void&#xa;+ modificarArea(): void&#xa;+ eliminarArea(): void" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="80" y="690" width="200" height="130" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="ventanaabmmanagers" value="VentanaABMManagers&#xa;&#xa;- sistema: Sistema&#xa;&#xa;+ VentanaABMManagers()&#xa;+ agregarManager(): void&#xa;+ modificarManager(): void&#xa;+ eliminarManager(): void" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="310" y="690" width="220" height="130" as="geometry" />
+        </mxCell>
+        
+        <!-- Relationships -->
+        <mxCell id="edge1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=diamondThin;endFill=1;endSize=20;" edge="1" parent="1" source="sistema" target="area">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=diamondThin;endFill=1;endSize=20;" edge="1" parent="1" source="sistema" target="manager">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=diamondThin;endFill=1;endSize=20;" edge="1" parent="1" source="sistema" target="empleado">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="empleado" target="area">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="empleado" target="manager">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="movimiento" target="empleado">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="gestorcv" target="geminiservice">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="190" y="670" as="sourcePoint" />
+            <mxPoint x="440" y="670" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="edge8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="ventanaabmareas" target="sistema">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="ventanaabmmanagers" target="sistema">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="ventanabienvenida" target="sistema">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="ventanaprincipal" target="sistema">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
 </mxfile>
