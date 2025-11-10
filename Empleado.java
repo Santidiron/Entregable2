@@ -14,7 +14,8 @@ public class Empleado {
     private Area area;
 
     public Empleado(int legajo, String nombre, String apellido, String cedula, String celular, String pathCV,
-                    int antiguedad, double salarioMensual, Manager manager, Area area) {
+                    int antiguedad, double salarioMensual, Manager manager, Area area)
+    {
         this.legajo = legajo;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -30,7 +31,7 @@ public class Empleado {
     // Getters and Setters
     public int getLegajo() {
         return legajo;
-
+    }
     public void setLegajo(int legajo) {
         this.legajo = legajo;
     }
@@ -89,4 +90,3 @@ public class Empleado {
         this.area = area;
         }    
     }
-}

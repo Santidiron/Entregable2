@@ -9,7 +9,8 @@ private class Manager {
     private Area area;
     private Empleado empleados[];
 
-    public Manager(String nombre, String cedula, String celular, int antiguedad, Area area, Empleado[] empleados) {
+    public Manager(String nombre, String cedula, String celular, int antiguedad, Area area, Empleado[] empleados)
+    {
         this.nombre = nombre;
         this.cedula = cedula;
         this.celular = celular;
