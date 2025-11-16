@@ -1,7 +1,11 @@
 //Diego Rocabado
 //Santiago Dirón
 
-public class Area{
+import java.io.Serializable;
+
+public class Area implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private int id;
     private String nombre;
     private String descripcion;
@@ -20,37 +24,30 @@ public class Area{
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
-
     public String getNombre() {
         return nombre;
     }
-
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    public String getDescripcion() {}
+    public String getDescripcion() {
         return descripcion;
-
+    }
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-
     public int getPresupuestoAnual() {
         return presupuestoAnual;
     }
-
     public void setPresupuestoAnual(int presupuestoAnual) {
         this.presupuestoAnual = presupuestoAnual;
     }
-
     public Empleado[] getEmpleados() {
         return empleados;
     }
-
     public void setEmpleados(Empleado[] empleados) {
         this.empleados = empleados;
     }

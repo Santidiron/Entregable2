@@ -1,7 +1,11 @@
 //Diego Rocabado
 //Santiago Dirón
 
-public class Movimiento {
+import java.io.Serializable;
+
+public class Movimiento implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private int mes;
     private String Fecha; // "Ingreso" o "Egreso"
     private Empleado empleado;
