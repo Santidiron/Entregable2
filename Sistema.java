@@ -248,6 +248,11 @@ public class Sistema {
             return false;
         }
         
+        // Si el empleado ya está en el área de destino, no hay nada que hacer
+        if (empleado.getArea() != null && empleado.getArea().equals(areaDestino)) {
+            return true;
+        }
+        
         // Verificar presupuesto disponible en el área de destino
         if (!hayPresupuestoDisponible(areaDestino, empleado.getSalarioMensual())) {
             return false;
