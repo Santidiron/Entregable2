@@ -1,7 +1,7 @@
 //Diego Rocabado
 //Santiago Dirón
 
-private class Manager {
+public class Manager {
     private String nombre;
     private String cedula;
     private String celular;
