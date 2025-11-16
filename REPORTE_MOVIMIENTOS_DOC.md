@@ -92,28 +92,53 @@ java -cp .:issues/9 TestReporteMovimientos
 ## Estructura de la Ventana
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│  Reporte de Movimientos                                    [_][□][X] │
-├─────────────────────────────────────────────────────────────────┤
-│ ┌─ Filtros ─────────────────────────────────────────────────┐   │
-│ │ Mes: [Todos ▼] Área: [Todas ▼] Empleado: [________]      │   │
-│ │                    [Aplicar Filtros] [Limpiar Filtros]    │   │
-│ └───────────────────────────────────────────────────────────┘   │
-│                                                                   │
-│ ┌─────────────────────────────────────────────────────────────┐ │
-│ │ Mes │ Área Origen      │ Área Destino     │ Empleado      │...│ │
-│ ├─────┼──────────────────┼──────────────────┼───────────────┤   │
-│ │ 12  │ Desarrollo       │ Testing          │ Juan Pérez    │...│ │
-│ │ 12  │ Recursos Humanos │ Desarrollo       │ María García  │...│ │
-│ │ 11  │ Testing          │ Recursos Humanos │ María García  │...│ │
-│ │ 10  │ Desarrollo       │ Recursos Humanos │ Carlos López  │...│ │
-│ │  9  │ Testing          │ Desarrollo       │ Juan Pérez    │...│ │
-│ │     │                  │                  │               │   │ │
-│ └─────────────────────────────────────────────────────────────┘ │
-│                                                                   │
-│                                          [Exportar a CSV]         │
-└───────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  Reporte de Movimientos                                          [_][□][X]  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ ┌─ Filtros ──────────────────────────────────────────────────────────────┐  │
+│ │ Mes: [Todos ▼]  Área: [Todas ▼]  Empleado: [____________]             │  │
+│ │                              [Aplicar Filtros] [Limpiar Filtros]       │  │
+│ └────────────────────────────────────────────────────────────────────────┘  │
+│                                                                              │
+│ ┌──────────────────────────────────────────────────────────────────────┐   │
+│ │ Mes │ Área Origen      │ Área Destino     │ Empleado        │ Fecha  │   │
+│ ├─────┼──────────────────┼──────────────────┼─────────────────┼────────┤   │
+│ │ 12  │ Desarrollo       │ Testing          │ Juan Pérez      │ 2024..│   │
+│ │ 12  │ Recursos Humanos │ Desarrollo       │ María García    │ 2024..│   │
+│ │ 11  │ Testing          │ Recursos Humanos │ María García    │ 2024..│   │
+│ │ 10  │ Desarrollo       │ Recursos Humanos │ Carlos López    │ 2024..│   │
+│ │  9  │ Testing          │ Desarrollo       │ Juan Pérez      │ 2024..│   │
+│ │  8  │ Recursos Humanos │ Testing          │ Carlos López    │ 2024..│   │
+│ │  7  │ Desarrollo       │ Recursos Humanos │ Juan Pérez      │ 2024..│   │
+│ │     │                  │                  │                 │        │ ▲ │
+│ │     │                  │                  │                 │        │ █ │
+│ │     │                  │                  │                 │        │ ▼ │
+│ └──────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+│                                                     [Exportar a CSV]         │
+└──────────────────────────────────────────────────────────────────────────────┘
 ```
+
+### Ejemplo de uso de filtros:
+
+**Caso 1: Filtrar movimientos del mes 12**
+- Seleccionar "12" en el combo de Mes
+- Clic en "Aplicar Filtros"
+- Resultado: Solo muestra movimientos del mes 12
+
+**Caso 2: Filtrar por área "Desarrollo"**
+- Seleccionar "Desarrollo" en el combo de Área
+- Clic en "Aplicar Filtros"
+- Resultado: Muestra movimientos donde Desarrollo es origen O destino
+
+**Caso 3: Buscar empleado "Juan"**
+- Escribir "juan" en el campo Empleado
+- Clic en "Aplicar Filtros"
+- Resultado: Muestra todos los movimientos de empleados cuyo nombre contiene "Juan"
+
+**Caso 4: Filtros combinados**
+- Mes: "12", Área: "Desarrollo", Empleado: ""
+- Resultado: Movimientos del mes 12 relacionados con Desarrollo
 
 ## Archivos Creados
 
