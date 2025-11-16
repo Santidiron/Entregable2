@@ -91,6 +91,5 @@ public class Empleado implements Serializable {
     }
     public void setArea(Area area) {
         this.area = area;
-        }    
     }
 }

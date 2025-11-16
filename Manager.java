@@ -1,11 +1,12 @@
 //Diego Rocabado
 //Santiago Dirón
 
+public class Manager {
 import java.io.Serializable;
 
 public class Manager implements Serializable {
     private static final long serialVersionUID = 1L;
-    
+
 public class Manager {
     private String nombre;
     private String cedula;

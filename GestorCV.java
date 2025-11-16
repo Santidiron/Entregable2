@@ -3,199 +3,111 @@
 
 import java.io.*;
 import java.nio.file.*;
-import java.util.*;
 
 public class GestorCV {
-    private static final String CARPETA_CVS = "cvs";
-    
+    private static final String CV_DIRECTORY = "cvs/";
+
+    // Constructor
     public GestorCV() {
-        crearCarpetaCVs();
-    }
-
-    /**
-     * Crea la carpeta cvs si no existe
-     */
-    private void crearCarpetaCVs() {
-        File carpeta = new File(CARPETA_CVS);
-        if (!carpeta.exists()) {
-            carpeta.mkdir();
+        // Create cvs directory if it doesn't exist
+        try {
+            Files.createDirectories(Paths.get(CV_DIRECTORY));
+        } catch (IOException e) {
+            System.err.println("Error creating CV directory: " + e.getMessage());
         }
     }
 
     /**
-     * Procesa un archivo CV y extrae información básica
-     * @param archivoCV El archivo CV a procesar
-     * @return Un mapa con los datos extraídos
-     * @throws IOException Si hay error al leer el archivo
+     * Guarda un archivo CV en el directorio cvs/
+     * @param archivoOrigen Path del archivo CV original
+     * @param cedula Cédula del empleado
+     * @param nombre Nombre del empleado
+     * @param apellido Apellido del empleado
+     * @return Path del archivo guardado, o null si hubo error
      */
-    public Map<String, String> procesarCV(File archivoCV) throws IOException {
-        if (archivoCV == null) {
-            throw new IllegalArgumentException("El archivo CV no puede ser nulo");
+    public String guardarCV(String archivoOrigen, String cedula, String nombre, String apellido) {
+        if (archivoOrigen == null || archivoOrigen.isEmpty()) {
+            return null;
         }
-        if (!archivoCV.exists()) {
-            throw new FileNotFoundException("El archivo CV no existe: " + archivoCV.getPath());
+
+        // Validar que el archivo sea .txt
+        if (!archivoOrigen.toLowerCase().endsWith(".txt")) {
+            System.err.println("Error: El archivo CV debe ser .txt");
+            return null;
         }
-        if (!validarArchivo(archivoCV)) {
-            throw new IllegalArgumentException("El archivo CV no es válido");
+
+        // Crear nombre del archivo destino
+        String nombreArchivo = cedula + "_" + nombre + "_" + apellido + ".txt";
+        String pathDestino = CV_DIRECTORY + nombreArchivo;
+
+        try {
+            // Copiar archivo al directorio cvs/
+            Path origen = Paths.get(archivoOrigen);
+            Path destino = Paths.get(pathDestino);
+
+            if (!Files.exists(origen)) {
+                System.err.println("Error: El archivo origen no existe: " + archivoOrigen);
+                return null;
+            }
+
+            Files.copy(origen, destino, StandardCopyOption.REPLACE_EXISTING);
+            return pathDestino;
+        } catch (IOException e) {
+            System.err.println("Error guardando CV: " + e.getMessage());
+            return null;
         }
-        
-        return extraerDatos(leerArchivo(archivoCV));
     }
 
     /**
      * Lee el contenido de un archivo CV
-     * @param archivo El archivo a leer
-     * @return El contenido del archivo como String
-     * @throws IOException Si hay error al leer
+     * @param pathCV Path del archivo CV
+     * @return Contenido del archivo, o null si hubo error
      */
-    private String leerArchivo(File archivo) throws IOException {
-        return new String(Files.readAllBytes(archivo.toPath()));
-    }
+    public String leerCV(String pathCV) {
+        if (pathCV == null || pathCV.isEmpty()) {
+            return null;
+        }
 
-    /**
-     * Extrae datos básicos del contenido del CV
-     * @param contenido El contenido del CV
-     * @return Un mapa con los datos extraídos
-     */
-    public Map<String, String> extraerDatos(String contenido) {
-        Map<String, String> datos = new HashMap<>();
-        
-        if (contenido == null || contenido.trim().isEmpty()) {
-            return datos;
-        }
-        
-        // Extracción básica de datos (puede ser mejorada con regex o procesamiento más avanzado)
-        String[] lineas = contenido.split("\n");
-        
-        for (String linea : lineas) {
-            linea = linea.trim();
-            if (linea.toLowerCase().startsWith("nombre:")) {
-                datos.put("nombre", linea.substring(7).trim());
-            } else if (linea.toLowerCase().startsWith("apellido:")) {
-                datos.put("apellido", linea.substring(9).trim());
-            } else if (linea.toLowerCase().startsWith("cedula:") || linea.toLowerCase().startsWith("cédula:")) {
-                datos.put("cedula", linea.substring(linea.indexOf(":") + 1).trim());
-            } else if (linea.toLowerCase().startsWith("celular:")) {
-                datos.put("celular", linea.substring(8).trim());
-            } else if (linea.toLowerCase().startsWith("email:") || linea.toLowerCase().startsWith("e-mail:")) {
-                datos.put("email", linea.substring(linea.indexOf(":") + 1).trim());
-            }
-        }
-        
-        return datos;
-    }
-
-    /**
-     * Escribe un archivo CV en la carpeta cvs
-     * @param nombreArchivo Nombre del archivo (sin ruta)
-     * @param contenido Contenido del CV
-     * @throws IOException Si hay error al escribir
-     */
-    public void escribirCV(String nombreArchivo, String contenido) throws IOException {
-        if (nombreArchivo == null || nombreArchivo.trim().isEmpty()) {
-            throw new IllegalArgumentException("El nombre del archivo no puede ser nulo o vacío");
-        }
-        if (contenido == null) {
-            throw new IllegalArgumentException("El contenido no puede ser nulo");
-        }
-        
-        crearCarpetaCVs();
-        
-        File archivo = new File(CARPETA_CVS, nombreArchivo);
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivo))) {
-            writer.write(contenido);
+        try {
+            return new String(Files.readAllBytes(Paths.get(pathCV)));
+        } catch (IOException e) {
+            System.err.println("Error leyendo CV: " + e.getMessage());
+            return null;
         }
     }
 
     /**
-     * Lee un archivo CV de la carpeta cvs
-     * @param nombreArchivo Nombre del archivo (sin ruta)
-     * @return El contenido del archivo
-     * @throws IOException Si hay error al leer
-     */
-    public String leerCV(String nombreArchivo) throws IOException {
-        if (nombreArchivo == null || nombreArchivo.trim().isEmpty()) {
-            throw new IllegalArgumentException("El nombre del archivo no puede ser nulo o vacío");
-        }
-        
-        File archivo = new File(CARPETA_CVS, nombreArchivo);
-        if (!archivo.exists()) {
-            throw new FileNotFoundException("El archivo CV no existe: " + nombreArchivo);
-        }
-        
-        return leerArchivo(archivo);
-    }
-
-    /**
-     * Valida que un archivo CV tenga el formato correcto
-     * @param archivo El archivo a validar
+     * Valida que un archivo existe y es .txt
+     * @param pathArchivo Path del archivo
      * @return true si el archivo es válido, false en caso contrario
      */
-    public boolean validarArchivo(File archivo) {
-        if (archivo == null || !archivo.exists()) {
+    public boolean validarArchivoCV(String pathArchivo) {
+        if (pathArchivo == null || pathArchivo.isEmpty()) {
             return false;
         }
-        
-        // Validar que sea un archivo de texto
-        String nombre = archivo.getName().toLowerCase();
-        return nombre.endsWith(".txt") || nombre.endsWith(".pdf") || nombre.endsWith(".doc") || nombre.endsWith(".docx");
-    }
 
-    /**
-     * Lista todos los archivos CV en la carpeta cvs
-     * @return Lista de nombres de archivos
-     */
-    public List<String> listarCVs() {
-        List<String> cvs = new ArrayList<>();
-        File carpeta = new File(CARPETA_CVS);
-        
-        if (carpeta.exists() && carpeta.isDirectory()) {
-            File[] archivos = carpeta.listFiles();
-            if (archivos != null) {
-                for (File archivo : archivos) {
-                    if (archivo.isFile()) {
-                        cvs.add(archivo.getName());
-                    }
-                }
-            }
+        if (!pathArchivo.toLowerCase().endsWith(".txt")) {
+            return false;
         }
-        
-        return cvs;
+
+        return Files.exists(Paths.get(pathArchivo));
     }
 
     /**
-     * Elimina un archivo CV de la carpeta cvs
-     * @param nombreArchivo Nombre del archivo a eliminar
+     * Elimina un archivo CV
+     * @param pathCV Path del archivo CV
      * @return true si se eliminó correctamente, false en caso contrario
      */
-    public boolean eliminarCV(String nombreArchivo) {
-        if (nombreArchivo == null || nombreArchivo.trim().isEmpty()) {
+    public boolean eliminarCV(String pathCV) {
+        if (pathCV == null || pathCV.isEmpty()) {
             return false;
         }
-        
-        File archivo = new File(CARPETA_CVS, nombreArchivo);
-        return archivo.exists() && archivo.delete();
-    }
 
-    /**
-     * Verifica si existe un archivo CV en la carpeta cvs
-     * @param nombreArchivo Nombre del archivo
-     * @return true si existe, false en caso contrario
-     */
-    public boolean existeCV(String nombreArchivo) {
-        if (nombreArchivo == null || nombreArchivo.trim().isEmpty()) {
+        try {
+            return Files.deleteIfExists(Paths.get(pathCV));
+        } catch (IOException e) {
+            System.err.println("Error eliminando CV: " + e.getMessage());
             return false;
         }
-        
-        File archivo = new File(CARPETA_CVS, nombreArchivo);
-        return archivo.exists() && archivo.isFile();
-    }
-
-    /**
-     * Obtiene la ruta completa de la carpeta cvs
-     * @return La ruta de la carpeta cvs
-     */
-    public String getCarpetaCVs() {
-        return CARPETA_CVS;
     }
 }

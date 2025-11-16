@@ -1,18 +1,10 @@
-# Compiled class files
 *.class
-
-# Package Files
 *.jar
 *.war
 *.ear
-
-# IDE files
-.idea/
-*.iml
-.vscode/
-*.swp
-*.swo
-
-# OS files
+*.log
 .DS_Store
-Thumbs.db
+cvs/
+*.ctxt
+.mtj.tmp/
+hs_err_pid*

@@ -1,168 +1,211 @@
 //Diego Rocabado
 //Santiago Dirón
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 public class Sistema {
-    private List<Area> areas;
     private List<Empleado> empleados;
-    private List<Movimiento> movimientos;
-    private int nextAreaId;
+    private List<Manager> managers;
+    private List<Area> areas;
+    private int siguienteLegajo;
+    private GestorCV gestorCV;
 
     public Sistema() {
-        this.areas = new ArrayList<>();
         this.empleados = new ArrayList<>();
-        this.movimientos = new ArrayList<>();
-        this.nextAreaId = 1;
-    }
-
-    // Area Management Methods
-
-    /**
-     * Adds a new area to the system
-     * @param nombre Area name (must be unique)
-     * @param descripcion Area description
-     * @param presupuestoAnual Annual budget (must be > 0)
-     * @return The created Area or null if validation fails
-     */
-    public Area agregarArea(String nombre, String descripcion, int presupuestoAnual) {
-        // Validate unique name
-        if (existeAreaConNombre(nombre)) {
-            return null;
-        }
-
-        // Validate budget > 0
-        if (presupuestoAnual <= 0) {
-            return null;
-        }
-
-        Area nuevaArea = new Area(nextAreaId++, nombre, descripcion, presupuestoAnual, new Empleado[0]);
-        areas.add(nuevaArea);
-        return nuevaArea;
+        this.managers = new ArrayList<>();
+        this.areas = new ArrayList<>();
+        this.siguienteLegajo = 1000; // Iniciar legajos desde 1000
+        this.gestorCV = new GestorCV();
     }
 
     /**
-     * Checks if an area with the given name already exists
+     * Genera el siguiente número de legajo automáticamente
      */
-    public boolean existeAreaConNombre(String nombre) {
-        for (Area area : areas) {
-            if (area.getNombre().equalsIgnoreCase(nombre)) {
-                return true;
-            }
-        }
-        return false;
+    public int generarLegajo() {
+        return siguienteLegajo++;
     }
 
     /**
-     * Removes an area from the system
-     * @param area The area to remove
-     * @return true if removed successfully, false if the area has employees
+     * Valida que una cédula sea única en el sistema (no existe en empleados ni managers)
      */
-    public boolean eliminarArea(Area area) {
-        // Check if area has employees
-        if (tieneEmpleados(area)) {
+    public boolean validarCedulaUnica(String cedula) {
+        if (cedula == null || cedula.isEmpty()) {
             return false;
         }
 
-        return areas.remove(area);
-    }
-
-    /**
-     * Checks if an area has any employees
-     */
-    public boolean tieneEmpleados(Area area) {
-        for (Empleado empleado : empleados) {
-            if (empleado.getArea() != null && empleado.getArea().getId() == area.getId()) {
-                return true;
+        // Verificar en empleados
+        for (Empleado emp : empleados) {
+            if (emp.getCedula().equals(cedula)) {
+                return false;
             }
         }
-        return false;
+
+        // Verificar en managers
+        for (Manager mgr : managers) {
+            if (mgr.getCedula().equals(cedula)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
-     * Modifies an area (only description can be changed)
-     * @param area The area to modify
-     * @param nuevaDescripcion The new description
+     * Valida que el área tenga presupuesto suficiente para el salario del empleado
      */
-    public void modificarArea(Area area, String nuevaDescripcion) {
-        area.setDescripcion(nuevaDescripcion);
+    public boolean validarPresupuestoArea(Area area, double salarioMensual) {
+        if (area == null) {
+            return false;
+        }
+
+        // Calcular presupuesto anual del nuevo empleado
+        double salarioAnual = salarioMensual * 12;
+
+        // Calcular salarios actuales del área
+        double salariosActuales = 0;
+        for (Empleado emp : empleados) {
+            if (emp.getArea() != null && emp.getArea().getId() == area.getId()) {
+                salariosActuales += emp.getSalarioMensual() * 12;
+            }
+        }
+
+        // Verificar si hay presupuesto suficiente
+        return (salariosActuales + salarioAnual) <= area.getPresupuestoAnual();
     }
 
     /**
-     * Gets all areas sorted by name
+     * Crea un nuevo empleado y lo agrega al sistema
      */
-    public List<Area> getAreasSortedByName() {
-        List<Area> sortedAreas = new ArrayList<>(areas);
-        sortedAreas.sort((a1, a2) -> a1.getNombre().compareToIgnoreCase(a2.getNombre()));
-        return sortedAreas;
+    public Empleado crearEmpleado(String nombre, String apellido, String cedula, String celular,
+                                   String archivoCV, int antiguedad, double salarioMensual,
+                                   Manager manager, Area area) {
+        // Validaciones
+        if (nombre == null || nombre.isEmpty() || apellido == null || apellido.isEmpty() ||
+            cedula == null || cedula.isEmpty()) {
+            throw new IllegalArgumentException("Nombre, apellido y cédula son obligatorios");
+        }
+
+        if (!validarCedulaUnica(cedula)) {
+            throw new IllegalArgumentException("La cédula ya existe en el sistema");
+        }
+
+        if (manager == null || area == null) {
+            throw new IllegalArgumentException("Manager y área son obligatorios");
+        }
+
+        if (!validarPresupuestoArea(area, salarioMensual)) {
+            throw new IllegalArgumentException("El área no tiene presupuesto suficiente para este salario");
+        }
+
+        // Guardar CV
+        String pathCV = null;
+        if (archivoCV != null && !archivoCV.isEmpty()) {
+            pathCV = gestorCV.guardarCV(archivoCV, cedula, nombre, apellido);
+            if (pathCV == null) {
+                throw new IllegalArgumentException("Error al guardar el archivo CV");
+            }
+        }
+
+        // Crear empleado
+        int legajo = generarLegajo();
+        Empleado empleado = new Empleado(legajo, nombre, apellido, cedula, celular, pathCV,
+                                         antiguedad, salarioMensual, manager, area);
+
+        empleados.add(empleado);
+        return empleado;
     }
 
     /**
-     * Finds an area by ID
+     * Actualiza los datos de un empleado (solo celular y salario)
      */
-    public Area buscarAreaPorId(int id) {
-        for (Area area : areas) {
-            if (area.getId() == id) {
-                return area;
+    public void actualizarEmpleado(Empleado empleado, String celular, double salarioMensual) {
+        if (empleado == null) {
+            throw new IllegalArgumentException("Empleado no puede ser null");
+        }
+
+        // Validar presupuesto si se cambia el salario
+        if (salarioMensual != empleado.getSalarioMensual()) {
+            // Calcular diferencia de presupuesto
+            double diferenciaSalario = salarioMensual - empleado.getSalarioMensual();
+            double diferenciaAnual = diferenciaSalario * 12;
+
+            Area area = empleado.getArea();
+            double salariosActuales = 0;
+            for (Empleado emp : empleados) {
+                if (emp.getArea() != null && emp.getArea().getId() == area.getId()) {
+                    salariosActuales += emp.getSalarioMensual() * 12;
+                }
+            }
+
+            if ((salariosActuales + diferenciaAnual) > area.getPresupuestoAnual()) {
+                throw new IllegalArgumentException("El área no tiene presupuesto suficiente para este salario");
+            }
+
+            empleado.setSalarioMensual(salarioMensual);
+        }
+
+        if (celular != null) {
+            empleado.setCelular(celular);
+        }
+    }
+
+    /**
+     * Obtiene todos los empleados ordenados por nombre
+     */
+    public List<Empleado> obtenerEmpleadosOrdenados() {
+        List<Empleado> ordenados = new ArrayList<>(empleados);
+        ordenados.sort((e1, e2) -> e1.getNombre().compareToIgnoreCase(e2.getNombre()));
+        return ordenados;
+    }
+
+    /**
+     * Busca un empleado por legajo
+     */
+    public Empleado buscarEmpleadoPorLegajo(int legajo) {
+        for (Empleado emp : empleados) {
+            if (emp.getLegajo() == legajo) {
+                return emp;
             }
         }
         return null;
     }
 
-    // Employee Movement Methods
-
     /**
-     * Moves an employee from one area to another
-     * @param empleado The employee to move
-     * @param areaDestino The destination area
-     * @return true if movement was successful, false if budget validation fails
+     * Lee el CV de un empleado
      */
-    public boolean moverEmpleado(Empleado empleado, Area areaDestino) {
-        Area areaOrigen = empleado.getArea();
-
-        // Validate budget in destination area
-        double salarioAnual = empleado.getSalarioMensual() * 12;
-        if (areaDestino.getPresupuestoAnual() < salarioAnual) {
-            return false;
+    public String leerCVEmpleado(Empleado empleado) {
+        if (empleado == null || empleado.getPathCV() == null) {
+            return null;
         }
-
-        // Update budgets
-        if (areaOrigen != null) {
-            areaOrigen.setPresupuestoAnual((int)(areaOrigen.getPresupuestoAnual() + salarioAnual));
-        }
-        areaDestino.setPresupuestoAnual((int)(areaDestino.getPresupuestoAnual() - salarioAnual));
-
-        // Update employee's area
-        empleado.setArea(areaDestino);
-
-        // Register movement with current month
-        int mesActual = Calendar.getInstance().get(Calendar.MONTH) + 1; // Calendar.MONTH is 0-based
-        Movimiento movimiento = new Movimiento(mesActual, "", empleado, areaOrigen, areaDestino);
-        movimientos.add(movimiento);
-
-        return true;
+        return gestorCV.leerCV(empleado.getPathCV());
     }
 
-    // Getters
+    // Getters y métodos para gestionar managers y áreas
+    public List<Empleado> getEmpleados() {
+        return empleados;
+    }
+
+    public List<Manager> getManagers() {
+        return managers;
+    }
 
     public List<Area> getAreas() {
         return areas;
     }
 
-    public List<Empleado> getEmpleados() {
-        return empleados;
+    public void agregarManager(Manager manager) {
+        if (manager != null) {
+            managers.add(manager);
+        }
     }
 
-    public List<Movimiento> getMovimientos() {
-        return movimientos;
+    public void agregarArea(Area area) {
+        if (area != null) {
+            areas.add(area);
+        }
     }
 
-    /**
-     * Adds an employee to the system
-     */
-    public void agregarEmpleado(Empleado empleado) {
-        empleados.add(empleado);
+    public GestorCV getGestorCV() {
+        return gestorCV;
     }
 }
