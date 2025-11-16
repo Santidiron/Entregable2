@@ -28,6 +28,15 @@ public class Sistema {
         areas.add(area2);
         areas.add(area3);
         areas.add(area4);
+        
+        // Crear managers de ejemplo
+        Manager m1 = new Manager("Carlos Rodríguez", "1.234.567-8", "099 123 456", 15, area1, new Empleado[0]);
+        Manager m2 = new Manager("Ana García", "2.345.678-9", "098 765 432", 12, area2, new Empleado[0]);
+        Manager m3 = new Manager("Pedro Martínez", "3.456.789-0", "099 888 777", 8, area3, new Empleado[0]);
+        
+        managers.add(m1);
+        managers.add(m2);
+        managers.add(m3);
     }
     
     public List<Manager> getManagers() {

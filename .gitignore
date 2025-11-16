@@ -1,0 +1,13 @@
+*.class
+*.jar
+*.war
+*.ear
+.DS_Store
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+target/
+bin/
