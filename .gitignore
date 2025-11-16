@@ -12,9 +12,6 @@ cvs/
 # Data files (runtime data)
 *.dat
 
-# Test files (temporary)
-TestPersistenciaGestorCV.java
-
 # IDE files
 .vscode/
 .idea/
