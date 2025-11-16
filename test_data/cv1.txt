@@ -1,0 +1,50 @@
+CURRICULUM VITAE
+================
+
+Nombre: Juan Pérez
+Legajo: 1001
+Email: juan.perez@empresa.com
+Teléfono: 555-1234
+
+EXPERIENCIA PROFESIONAL
+-----------------------
+
+Desarrollador Senior - Empresa ABC (2019-2024)
+- Desarrollo de aplicaciones web con Java, Spring Boot y React
+- Liderazgo de equipo de 5 desarrolladores
+- Implementación de arquitectura de microservicios
+- Mejora del rendimiento de aplicaciones en un 40%
+
+Desarrollador Junior - Empresa XYZ (2017-2019)
+- Desarrollo de aplicaciones Java
+- Mantenimiento de bases de datos MySQL y PostgreSQL
+- Participación en proyectos ágiles con Scrum
+
+EDUCACIÓN
+---------
+
+Ingeniería en Sistemas - Universidad Nacional (2013-2017)
+- Graduado con honores
+- Tesis sobre inteligencia artificial y machine learning
+
+HABILIDADES TÉCNICAS
+--------------------
+
+Lenguajes: Java, JavaScript, Python, SQL
+Frameworks: Spring Boot, React, Angular, Django
+Bases de datos: MySQL, PostgreSQL, MongoDB
+Herramientas: Git, Docker, Jenkins, AWS
+Metodologías: Scrum, Kanban, TDD
+
+IDIOMAS
+-------
+
+Español: Nativo
+Inglés: Avanzado (TOEFL 105/120)
+
+CERTIFICACIONES
+---------------
+
+- Oracle Certified Professional, Java SE 11 Developer
+- AWS Certified Solutions Architect
+- Scrum Master Certification
