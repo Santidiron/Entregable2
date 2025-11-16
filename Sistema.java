@@ -96,37 +96,37 @@ public class Sistema {
 
         // 3. Create Employees for each area
         // Area Personal - 2 employees
-        crearEmpleadoConCV("Carlos", "González", "11111111", "099111111", 5, 35000, 
+        crearEmpleadoConCV("Carlos", "González", "11111111", "099111111", 5, 18000, 
                           managerAnaMartinez, areaPersonal);
-        crearEmpleadoConCV("María", "Rodríguez", "11111112", "099111112", 3, 32000, 
+        crearEmpleadoConCV("María", "Rodríguez", "11111112", "099111112", 3, 16000, 
                           managerAnaMartinez, areaPersonal);
 
         // Area RRHH - 3 employees
-        crearEmpleadoConCV("Pedro", "Sánchez", "22222221", "099222221", 7, 38000, 
+        crearEmpleadoConCV("Pedro", "Sánchez", "22222221", "099222221", 7, 11000, 
                           managerRicardoMorales, areaRRHH);
-        crearEmpleadoConCV("Lucía", "Fernández", "22222222", "099222222", 4, 33000, 
+        crearEmpleadoConCV("Lucía", "Fernández", "22222222", "099222222", 4, 10500, 
                           managerRicardoMorales, areaRRHH);
-        crearEmpleadoConCV("Diego", "Martín", "22222223", "099222223", 2, 28000, 
+        crearEmpleadoConCV("Diego", "Martín", "22222223", "099222223", 2, 9500, 
                           managerRicardoMorales, areaRRHH);
 
         // Area Seguridad - 2 employees
-        crearEmpleadoConCV("Roberto", "López", "33333331", "099333331", 9, 40000, 
+        crearEmpleadoConCV("Roberto", "López", "33333331", "099333331", 9, 13500, 
                           managerLauraTorales, areaSeguridad);
-        crearEmpleadoConCV("Andrea", "García", "33333332", "099333332", 6, 35000, 
+        crearEmpleadoConCV("Andrea", "García", "33333332", "099333332", 6, 12000, 
                           managerLauraTorales, areaSeguridad);
 
         // Area Comunicaciones - 2 employees (no manager assigned, so using first manager)
-        crearEmpleadoConCV("Sofía", "Pérez", "44444441", "099444441", 4, 34000, 
+        crearEmpleadoConCV("Sofía", "Pérez", "44444441", "099444441", 4, 15000, 
                           managerAnaMartinez, areaComunicaciones);
-        crearEmpleadoConCV("Javier", "Ramírez", "44444442", "099444442", 5, 36000, 
+        crearEmpleadoConCV("Javier", "Ramírez", "44444442", "099444442", 5, 14500, 
                           managerAnaMartinez, areaComunicaciones);
 
         // Area Marketing - 3 employees
-        crearEmpleadoConCV("Valentina", "Torres", "55555551", "099555551", 8, 42000, 
+        crearEmpleadoConCV("Valentina", "Torres", "55555551", "099555551", 8, 14000, 
                           managerJuanPabloZapata, areaMarketing);
-        crearEmpleadoConCV("Mateo", "Flores", "55555552", "099555552", 3, 31000, 
+        crearEmpleadoConCV("Mateo", "Flores", "55555552", "099555552", 3, 13000, 
                           managerJuanPabloZapata, areaMarketing);
-        crearEmpleadoConCV("Isabella", "Vega", "55555553", "099555553", 5, 37000, 
+        crearEmpleadoConCV("Isabella", "Vega", "55555553", "099555553", 5, 13500, 
                           managerJuanPabloZapata, areaMarketing);
 
         // 4. Create historical movements
