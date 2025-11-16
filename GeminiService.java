@@ -14,8 +14,18 @@ import java.nio.file.Paths;
 import java.util.List;
 
 /**
- * Service class for integrating with Google's Gemini API
- * Provides functionality to generate intelligent reports about employee area transitions
+ * Service class for integrating with Google's Gemini API.
+ * Provides functionality to generate intelligent reports about employee area transitions.
+ * 
+ * This service handles:
+ * - API authentication via environment variable GEMINI_API_KEY
+ * - HTTP communication with Gemini Pro model
+ * - Prompt construction with employee and area data
+ * - JSON response parsing
+ * - Error handling and fallback mechanisms
+ * 
+ * @author Diego Rocabado
+ * @author Santiago Dirón
  */
 public class GeminiService {
     

@@ -13,8 +13,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Window for generating intelligent reports about employee area transitions
- * Uses the GeminiService to generate AI-powered analysis
+ * Window for generating intelligent reports about employee area transitions.
+ * Uses the GeminiService to generate AI-powered analysis.
+ * 
+ * Features:
+ * - Employee selection via combo box
+ * - Display of employee information
+ * - Area selection with checkboxes
+ * - AI-powered report generation
+ * - Loading indicator
+ * - Report export to text file
+ * - Background processing to avoid UI freezing
+ * 
+ * @author Diego Rocabado
+ * @author Santiago Dirón
  */
 public class ReporteInteligenteWindow extends JFrame {
     
