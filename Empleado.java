@@ -35,7 +35,6 @@ public class Empleado implements Serializable {
     public int getLegajo() {
         return legajo;
     }
-
     public void setLegajo(int legajo) {
         this.legajo = legajo;
     }
@@ -92,5 +91,6 @@ public class Empleado implements Serializable {
     }
     public void setArea(Area area) {
         this.area = area;
+        }    
     }
 }

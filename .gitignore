@@ -1,21 +1,17 @@
 # Compiled class files
 *.class
 
-# Package files
+# Package Files
 *.jar
 *.war
 *.ear
 
-# CVs folder (runtime data)
-cvs/
-
-# Data files (runtime data)
-*.dat
-
 # IDE files
-.vscode/
 .idea/
 *.iml
+.vscode/
+*.swp
+*.swo
 
 # OS files
 .DS_Store
