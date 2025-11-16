@@ -1,7 +1,11 @@
 //Diego Rocabado
 //Santiago Dirón
 
-public class Empleado {
+import java.io.Serializable;
+
+public class Empleado implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private int legajo;
     private String nombre;
     private String apellido;
@@ -30,6 +34,7 @@ public class Empleado {
     // Getters and Setters
     public int getLegajo() {
         return legajo;
+    }
 
     public void setLegajo(int legajo) {
         this.legajo = legajo;
@@ -87,6 +92,5 @@ public class Empleado {
     }
     public void setArea(Area area) {
         this.area = area;
-        }    
     }
 }

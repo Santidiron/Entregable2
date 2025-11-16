@@ -1,7 +1,11 @@
 //Diego Rocabado
 //Santiago Dirón
 
-public class Area{
+import java.io.Serializable;
+
+public class Area implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private int id;
     private String nombre;
     private String descripcion;
@@ -25,11 +29,11 @@ public class Area{
     }
     public String getNombre() {
         return nombre;
-    ;
+    }
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    public String getDescripcion() {}
+    public String getDescripcion() {
         return descripcion;
     }
     public void setDescripcion(String descripcion) {
