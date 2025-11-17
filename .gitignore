@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Compiled class files
 *.class
 
@@ -30,3 +31,18 @@ dist/
 # Project-specific ignored files
 TestSistema.java
 ValidarPresupuestos.java
+=======
+*.class
+*.jar
+*.war
+*.ear
+.DS_Store
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+target/
+bin/
+>>>>>>> origin/copilot/develop-abm-for-managers

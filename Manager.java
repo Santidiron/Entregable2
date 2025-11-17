@@ -1,11 +1,15 @@
 //Diego Rocabado
 //Santiago Dirón
 
+<<<<<<< HEAD
 import java.io.Serializable;
 
 public class Manager implements Serializable {
     private static final long serialVersionUID = 1L;
 
+=======
+public class Manager {
+>>>>>>> origin/copilot/develop-abm-for-managers
     private String nombre;
     private String cedula;
     private String celular;
