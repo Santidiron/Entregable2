@@ -18,6 +18,14 @@
 .DS_Store
 Thumbs.db
 
+# Build artifacts
+target/
+build/
+dist/
+
+# Logs
+*.log
+
 # Project-specific ignored files
 TestSistema.java
 ValidarPresupuestos.java

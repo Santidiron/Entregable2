@@ -1,7 +1,6 @@
 //Diego Rocabado
 //Santiago Dirón
 
-public class Movimiento {
 import java.io.Serializable;
 
 public class Movimiento implements Serializable {

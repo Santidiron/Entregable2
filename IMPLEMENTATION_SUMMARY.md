@@ -44,10 +44,10 @@ This implementation successfully addresses all requirements specified in Issue #
 - ✅ Panel showing basic employee data (legajo, nombre, cédula, celular, antigüedad, salario, área, manager, CV)
 - ✅ List of areas with checkboxes for selection
 - ✅ Area descriptions displayed below each checkbox
-- ✅ "Generar Reporte con IA" button with robot emoji (🤖)
-- ✅ Loading indicator with clock icon (⏱) and "Procesando..." message
+- ✅ "Generar Reporte con IA" button
+- ✅ Loading indicator with "Procesando..." message
 - ✅ JTextArea for displaying analysis results
-- ✅ "Guardar Reporte" button with disk emoji (💾)
+- ✅ "Guardar Reporte" button
 
 #### Functionality
 - ✅ Employee selection updates displayed information automatically
@@ -86,7 +86,6 @@ This implementation successfully addresses all requirements specified in Issue #
 #### Code Quality
 - ✅ Follows Java naming conventions
 - ✅ Proper exception handling throughout
-- ✅ No security vulnerabilities (CodeQL scan passed)
 - ✅ Uses Java standard library only (no external dependencies)
 - ✅ .gitignore configured to exclude compiled files
 
@@ -95,82 +94,93 @@ This implementation successfully addresses all requirements specified in Issue #
 - ✅ Proper JSON string escaping
 - ✅ Timeout prevents resource exhaustion
 - ✅ No sensitive data in error messages
-- ✅ CodeQL security scan: 0 alerts
 
 ## Testing Results
 
 ### Compilation
 ```
-✓ All Java files compile without errors
-✓ No warnings
+✔ All Java files compile without errors
+✔ No warnings
 ```
 
 ### Runtime Testing
 ```
-✓ GeminiService initializes correctly
-✓ API key detection works properly
-✓ Fallback mode generates appropriate reports
-✓ Employee data is properly formatted
-✓ Area information is correctly included
-✓ CV content is read and included when available
-✓ Missing CV is handled gracefully
+✔ GeminiService initializes correctly
+✔ API key detection works properly
+✔ Fallback mode generates appropriate reports
+✔ Employee data is properly formatted
+✔ Area information is correctly included
+✔ CV content is read and included when available
+✔ Missing CV is handled gracefully
 ```
 
 ### UI Testing
 ```
-✓ Window displays correctly
-✓ All UI components render properly
-✓ Employee selection updates info panel
-✓ Checkboxes for areas work correctly
-✓ Generate button triggers report creation
-✓ Loading indicator appears during processing
-✓ Results display in text area
-✓ Save button exports to file successfully
+✔ Window displays correctly
+✔ All UI components render properly
+✔ Employee selection updates info panel
+✔ Checkboxes for areas work correctly
+✔ Generate button triggers report creation
+✔ Loading indicator appears during processing
+✔ Results display in text area
+✔ Save button exports to file successfully
 ```
 
 ### Security Testing
 ```
-✓ CodeQL scan: 0 vulnerabilities
-✓ No hardcoded credentials
-✓ Proper input validation
-✓ Safe file operations
+✔ No hardcoded credentials
+✔ Proper input validation
+✔ Safe file operations
 ```
 
-## Files Changed/Added
+## Files Changed/Added (Issue #8)
 
 ### New Files
-- `GeminiService.java` (287 lines)
-- `ReporteInteligenteWindow.java` (388 lines)
-- `TestGeminiService.java` (86 lines)
-- `README_GEMINI.md` (143 lines)
-- `test_data/cv1.txt` (50 lines)
-- `test_data/cv2.txt` (50 lines)
-- `.gitignore` (19 lines)
+- `GeminiService.java`
+- `ReporteInteligenteWindow.java`
+- `TestGeminiService.java`
+- `README_GEMINI.md`
+- `test_data/cv1.txt`
+- `test_data/cv2.txt`
+- `.gitignore`
 
 ### Fixed Files
-- `Area.java` (fixed syntax errors)
-- `Empleado.java` (fixed syntax errors)
-- `Manager.java` (fixed visibility modifier)
+- `Area.java`
+- `Empleado.java`
+- `Manager.java`
 
-## Total Lines of Code
-- New implementation: ~900 lines
-- Documentation: ~143 lines
-- Test code: ~86 lines
-- **Total: 1,129 lines**
+---
 
-## Screenshots
+# Issue #11 - Implementation Summary
 
-![UI Implementation](https://github.com/user-attachments/assets/2dfbc7ff-5b4e-47aa-ab52-5b418f690fe7)
+## ✅ COMPLETED - Reporte de Movimientos y exportación CSV
 
-## Conclusion
+### What Was Implemented
 
-All requirements from Issue #8 have been successfully implemented and tested. The solution:
-- ✅ Uses only Java standard libraries as requested
-- ✅ Integrates with Gemini API correctly
-- ✅ Provides complete Swing UI with all requested features
-- ✅ Handles errors gracefully with fallback mechanism
-- ✅ Includes comprehensive testing
-- ✅ Has zero security vulnerabilities
-- ✅ Is well-documented and maintainable
+A complete GUI window application for reporting employee movements between areas with advanced filtering and CSV export capabilities.
 
-The implementation is production-ready and fully addresses the issue requirements.
+### 🎯 Requirements Fulfillment
+
+#### ✅ 1. Tabla de Movimientos
+- Table with columns: Mes, Área Origen, Área Destino, Empleado (Nombre Completo), Fecha
+- Shows all movements, sorted by month (most recent first)
+- Implemented in `ReporteMovimientos.java` with JTable and DefaultTableModel
+
+#### ✅ 2. Filtros
+- Filter by month, area, and employee
+- Real-time filtering using RowFilter
+
+#### ✅ 3. Exportar CSV
+- Button to export the current filtered view to CSV
+- Uses standard Java IO without external dependencies
+- Handles UTF-8 encoding and proper CSV escaping
+
+#### ✅ 4. Integración con el Sistema
+- Uses existing `Movimiento`, `Empleado` and `Area` classes
+- Reads data from the system's movement records
+
+## Files Changed/Added (Issue #11)
+
+- `Movimiento.java` (extended/fixed as needed)
+- `ReporteMovimientos.java` (new window)
+- `IMPLEMENTATION_SUMMARY.md` (this section)
