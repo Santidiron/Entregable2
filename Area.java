@@ -45,6 +45,10 @@ public class Area implements Serializable {
     public void setPresupuestoAnual(int presupuestoAnual) {
         this.presupuestoAnual = presupuestoAnual;
     }
+    // Compatibilidad con código que usa getPresupuesto
+    public int getPresupuesto() {
+        return presupuestoAnual;
+    }
     public Empleado[] getEmpleados() {
         return empleados;
     }

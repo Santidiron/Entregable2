@@ -9,6 +9,8 @@ import java.util.regex.Pattern;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * Clase principal del sistema que gestiona todas las entidades.
@@ -52,17 +54,20 @@ public class Sistema {
         areas.add(area);
     }
 
-    public void eliminarArea(Area area) {
-        areas.remove(area);
+    // Cambiamos a boolean para compatibilidad con tests y demos
+    public boolean eliminarArea(Area area) {
+        return bajaArea(area);
     }
 
     // Métodos para gestionar Managers
-    public void agregarManager(Manager manager) {
-        managers.add(manager);
+    // Cambiamos a boolean para compatibilidad con tests y GUI
+    public boolean agregarManager(Manager manager) {
+        return altaManager(manager);
     }
 
-    public void eliminarManager(Manager manager) {
-        managers.remove(manager);
+    // Cambiamos a boolean y delegamos en bajaManager
+    public boolean eliminarManager(Manager manager) {
+        return bajaManager(manager);
     }
 
     // Métodos para gestionar Empleados
@@ -332,5 +337,206 @@ public class Sistema {
             System.err.println("Error al crear archivo CV: " + pathCV);
             e.printStackTrace();
         }
+    }
+
+    // ==== API de Áreas requerida por tests y GUI ====
+
+    // Sobrecarga: crear y agregar área devolviendo el objeto
+    public Area agregarArea(String nombre, String descripcion, int presupuestoAnual) {
+        if (nombre == null || nombre.trim().isEmpty()) return null;
+        if (presupuestoAnual <= 0) return null;
+        // nombre único
+        for (Area a : areas) {
+            if (a.getNombre().equalsIgnoreCase(nombre.trim())) {
+                return null;
+            }
+        }
+        Area area = new Area(nextAreaId++, nombre.trim(), descripcion, presupuestoAnual, new Empleado[0]);
+        areas.add(area);
+        return area;
+    }
+
+    // Modificar descripción de un área existente
+    public void modificarArea(Area area, String nuevaDescripcion) {
+        if (area == null || nuevaDescripcion == null) return;
+        area.setDescripcion(nuevaDescripcion);
+    }
+
+    // Eliminar área devolviendo booleano
+    public boolean eliminarArea(Area area) {
+        return bajaArea(area);
+    }
+
+    // Áreas ordenadas alfabéticamente por nombre
+    public List<Area> getAreasSortedByName() {
+        List<Area> copia = new ArrayList<>(areas);
+        copia.sort(Comparator.comparing(a -> a.getNombre().toLowerCase()));
+        return copia;
+    }
+
+    // Buscar área por id
+    public Area buscarAreaPorId(int id) {
+        for (Area a : areas) {
+            if (a.getId() == id) return a;
+        }
+        return null;
+    }
+
+    // ==== API de validaciones usada en tests de empleados ====
+
+    public boolean validarCedulaUnica(String cedula) {
+        return esCedulaUnica(cedula);
+    }
+
+    public boolean validarPresupuestoArea(Area area, int salarioMensual) {
+        if (area == null) return false;
+        double totalActual = 0;
+        for (Empleado e : empleados) {
+            if (area.equals(e.getArea())) {
+                totalActual += e.getSalarioMensual();
+            }
+        }
+        double disponible = area.getPresupuesto() - totalActual * 12; // presupuestos anuales
+        return salarioMensual * 12 <= disponible;
+    }
+
+    public boolean validarFormatoCelular(String celular) {
+        if (celular == null) return false;
+        String c = celular.replace(" ", "");
+        return c.matches("^09\\d{7}$");
+    }
+
+    // ==== API de empleados ====
+
+    public int generarLegajo() {
+        return nextLegajo++;
+    }
+
+    public Empleado crearEmpleado(String nombre, String apellido, String cedula, String celular,
+                                  String pathCV, int antiguedad, double salarioMensual,
+                                  Manager manager, Area area) {
+        if (!validarFormatoCedula(cedula)) {
+            throw new IllegalArgumentException("Cédula inválida");
+        }
+        if (!esCedulaUnica(cedula)) {
+            throw new IllegalArgumentException("Cédula duplicada");
+        }
+        if (!validarFormatoCelular(celular)) {
+            throw new IllegalArgumentException("Celular inválido");
+        }
+        if (area != null && !validarPresupuestoArea(area, (int) salarioMensual)) {
+            throw new IllegalArgumentException("Salario excede presupuesto del área");
+        }
+        int legajo = generarLegajo();
+        Empleado empleado = new Empleado(legajo, nombre, apellido, cedula, celular, pathCV,
+                                         antiguedad, salarioMensual, manager, area);
+        empleados.add(empleado);
+        return empleado;
+    }
+
+    public String leerCVEmpleado(Empleado empleado) {
+        if (empleado == null || empleado.getPathCV() == null) return null;
+        try {
+            return Files.readString(Paths.get(empleado.getPathCV()));
+        } catch (IOException e) {
+            System.err.println("Error leyendo CV de empleado: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public Empleado buscarEmpleadoPorLegajo(int legajo) {
+        for (Empleado e : empleados) {
+            if (e.getLegajo() == legajo) return e;
+        }
+        return null;
+    }
+
+    public void actualizarEmpleado(Empleado empleado, String nuevoCelular, double nuevoSalario) {
+        if (empleado == null) return;
+        if (!validarFormatoCelular(nuevoCelular)) {
+            throw new IllegalArgumentException("Celular inválido");
+        }
+        empleado.setCelular(nuevoCelular);
+        empleado.setSalarioMensual(nuevoSalario);
+    }
+
+    public List<Empleado> obtenerEmpleadosOrdenados() {
+        List<Empleado> copia = new ArrayList<>(empleados);
+        copia.sort(Comparator.comparing(Empleado::getNombre)
+                              .thenComparing(Empleado::getApellido));
+        return copia;
+    }
+
+    public void registrarEmpleado(Empleado empleado) {
+        if (empleado != null && !empleados.contains(empleado)) {
+            empleados.add(empleado);
+        }
+    }
+
+    // ==== Movimientos ====
+
+    public void registrarMovimiento(Movimiento movimiento) {
+        if (movimiento != null) {
+            movimientos.add(movimiento);
+        }
+    }
+
+    public boolean moverEmpleado(Empleado empleado, Area nuevaArea) {
+        if (empleado == null || nuevaArea == null) return false;
+        // validar presupuesto destino
+        if (!validarPresupuestoArea(nuevaArea, (int) empleado.getSalarioMensual())) {
+            return false;
+        }
+        Area origen = empleado.getArea();
+        empleado.setArea(nuevaArea);
+        // Registrar movimiento
+        Movimiento movimiento = new Movimiento(0, java.time.LocalDate.now().toString(),
+                                               empleado, origen, nuevaArea);
+        movimientos.add(movimiento);
+        // Ajustar presupuestos (simplificado: ajustar atributos en Area)
+        if (origen != null) {
+            int nuevoPresOrigen = origen.getPresupuestoAnual() + (int) (empleado.getSalarioMensual() * 12);
+            origen.setPresupuestoAnual(nuevoPresOrigen);
+        }
+        int nuevoPresDestino = nuevaArea.getPresupuestoAnual() - (int) (empleado.getSalarioMensual() * 12);
+        nuevaArea.setPresupuestoAnual(nuevoPresDestino);
+        return true;
+    }
+
+    // ==== API para managers usada por GUI y tests ====
+
+    public int getCantidadEmpleadosACargo(Manager manager) {
+        int count = 0;
+        for (Empleado e : empleados) {
+            if (manager.equals(e.getManager())) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public Manager buscarManagerPorCedula(String cedula) {
+        for (Manager m : managers) {
+            if (m.getCedula().equals(cedula)) return m;
+        }
+        return null;
+    }
+
+    public boolean agregarManager(Manager manager) {
+        return altaManager(manager);
+    }
+
+    public boolean actualizarManager(Manager manager) {
+        // En esta implementación, el Manager ya se actualizó desde la GUI
+        // Solo verificamos formato del celular y devolvemos true si es válido
+        if (manager == null) return false;
+        if (!validarFormatoCelular(manager.getCelular())) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean eliminarManager(Manager manager) {
+        return bajaManager(manager);
     }
 }
