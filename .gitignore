@@ -18,9 +18,10 @@
 .DS_Store
 Thumbs.db
 
-# Build artifacts
-target/
+# Build directories
+bin/
 build/
+target/
 dist/
 
 # Logs

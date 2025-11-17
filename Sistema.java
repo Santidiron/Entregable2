@@ -6,6 +6,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * Clase principal del sistema que gestiona todas las entidades.
+ */
 public class Sistema {
     private ArrayList<Area> areas;
     private ArrayList<Manager> managers;
@@ -40,21 +43,31 @@ public class Sistema {
         return movimientos;
     }
 
-    // Add methods
-    public void addArea(Area area) {
+    // Métodos para gestionar Áreas
+    public void agregarArea(Area area) {
         areas.add(area);
     }
 
-    public void addManager(Manager manager) {
+    public void eliminarArea(Area area) {
+        areas.remove(area);
+    }
+
+    // Métodos para gestionar Managers
+    public void agregarManager(Manager manager) {
         managers.add(manager);
     }
 
-    public void addEmpleado(Empleado empleado) {
+    public void eliminarManager(Manager manager) {
+        managers.remove(manager);
+    }
+
+    // Métodos para gestionar Empleados
+    public void agregarEmpleado(Empleado empleado) {
         empleados.add(empleado);
     }
 
-    public void addMovimiento(Movimiento movimiento) {
-        movimientos.add(movimiento);
+    public void eliminarEmpleado(Empleado empleado) {
+        empleados.remove(empleado);
     }
 
     // Check if system has data
@@ -77,11 +90,11 @@ public class Sistema {
         Area areaComunicaciones = new Area(nextAreaId++, "Comunicaciones", "Comunicación interna y externa", 400000, new Empleado[0]);
         Area areaMarketing = new Area(nextAreaId++, "Marketing", "Estrategias de mercado", 550000, new Empleado[0]);
 
-        addArea(areaPersonal);
-        addArea(areaRRHH);
-        addArea(areaSeguridad);
-        addArea(areaComunicaciones);
-        addArea(areaMarketing);
+        agregarArea(areaPersonal);
+        agregarArea(areaRRHH);
+        agregarArea(areaSeguridad);
+        agregarArea(areaComunicaciones);
+        agregarArea(areaMarketing);
 
         // 2. Create Managers
         Manager managerAnaMartinez = new Manager("Ana Martínez", "12345678", "099123456", 10, areaPersonal, new Empleado[0]);
@@ -89,10 +102,10 @@ public class Sistema {
         Manager managerLauraTorales = new Manager("Laura Torales", "34567890", "099345678", 12, areaSeguridad, new Empleado[0]);
         Manager managerJuanPabloZapata = new Manager("Juan Pablo Zapata", "45678901", "099456789", 6, areaMarketing, new Empleado[0]);
 
-        addManager(managerAnaMartinez);
-        addManager(managerRicardoMorales);
-        addManager(managerLauraTorales);
-        addManager(managerJuanPabloZapata);
+        agregarManager(managerAnaMartinez);
+        agregarManager(managerRicardoMorales);
+        agregarManager(managerLauraTorales);
+        agregarManager(managerJuanPabloZapata);
 
         // 3. Create Employees for each area
         // Area Personal - 2 employees
@@ -130,7 +143,6 @@ public class Sistema {
                           managerJuanPabloZapata, areaMarketing);
 
         // 4. Create historical movements
-        // Get some employees for movements
         if (empleados.size() >= 5) {
             Empleado emp1 = empleados.get(0);
             Empleado emp2 = empleados.get(2);
@@ -138,18 +150,17 @@ public class Sistema {
             Empleado emp4 = empleados.get(6);
             Empleado emp5 = empleados.get(8);
 
-            // Create movements between different areas
             Movimiento mov1 = new Movimiento(1, "2024-01-15", emp1, areaPersonal, areaRRHH);
             Movimiento mov2 = new Movimiento(3, "2024-03-20", emp2, areaRRHH, areaSeguridad);
             Movimiento mov3 = new Movimiento(5, "2024-05-10", emp3, areaSeguridad, areaMarketing);
             Movimiento mov4 = new Movimiento(7, "2024-07-25", emp4, areaComunicaciones, areaPersonal);
             Movimiento mov5 = new Movimiento(9, "2024-09-18", emp5, areaMarketing, areaComunicaciones);
 
-            addMovimiento(mov1);
-            addMovimiento(mov2);
-            addMovimiento(mov3);
-            addMovimiento(mov4);
-            addMovimiento(mov5);
+            movimientos.add(mov1);
+            movimientos.add(mov2);
+            movimientos.add(mov3);
+            movimientos.add(mov4);
+            movimientos.add(mov5);
         }
     }
 
@@ -164,7 +175,7 @@ public class Sistema {
         // Create employee
         Empleado empleado = new Empleado(nextLegajo++, nombre, apellido, cedula, celular,
                                         pathCV, antiguedad, salario, manager, area);
-        addEmpleado(empleado);
+        agregarEmpleado(empleado);
     }
 
     // Helper method to create CV file
