@@ -2,7 +2,10 @@
 //Santiago Dirón
 
 import java.util.ArrayList;
-<<<<<<< HEAD
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.regex.Pattern;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -27,24 +30,24 @@ public class Sistema {
         this.nextLegajo = 1000;
     }
 
-    // Getters
-    public ArrayList<Area> getAreas() {
+    // Getters como List (para compatibilidad con código que use List)
+    public List<Area> getAreas() {
         return areas;
     }
 
-    public ArrayList<Manager> getManagers() {
+    public List<Manager> getManagers() {
         return managers;
     }
 
-    public ArrayList<Empleado> getEmpleados() {
+    public List<Empleado> getEmpleados() {
         return empleados;
     }
 
-    public ArrayList<Movimiento> getMovimientos() {
+    public List<Movimiento> getMovimientos() {
         return movimientos;
     }
 
-    // Métodos para gestionar Áreas
+    // Métodos para gestionar Áreas (API simple)
     public void agregarArea(Area area) {
         areas.add(area);
     }
@@ -76,7 +79,129 @@ public class Sistema {
         return !areas.isEmpty() || !managers.isEmpty() || !empleados.isEmpty() || !movimientos.isEmpty();
     }
 
-    // Main method to load preloaded data
+    // ==== Lógica de validación y reglas de negocio (resumida) ====
+
+    // Validar formato de cédula (formato uruguayo aproximado)
+    public boolean validarFormatoCedula(String cedula) {
+        if (cedula == null || cedula.trim().isEmpty()) {
+            return false;
+        }
+        Pattern pattern = Pattern.compile("^\\d{1}\\.\\d{3}\\.\\d{3}-\\d{1}$|^\\d{7,8}$");
+        return pattern.matcher(cedula.trim()).matches();
+    }
+
+    // Validar que la cédula sea única en el sistema
+    public boolean esCedulaUnica(String cedula) {
+        if (cedula == null) {
+            return false;
+        }
+        for (Manager m : managers) {
+            if (cedula.equals(m.getCedula())) {
+                return false;
+            }
+        }
+        for (Empleado e : empleados) {
+            if (cedula.equals(e.getCedula())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Métodos de ayuda que se intuyen desde el archivo original (presupuestos, existencia, etc.)
+    private boolean existeManager(Manager manager) {
+        return managers.contains(manager);
+    }
+
+    private boolean existeArea(Area area) {
+        return areas.contains(area);
+    }
+
+    private boolean areaContieneEmpleados(Area area) {
+        for (Empleado e : empleados) {
+            if (area.equals(e.getArea())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean managerTieneEmpleados(Manager manager) {
+        for (Empleado e : empleados) {
+            if (manager.equals(e.getManager())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean hayPresupuestoDisponible(Area area, double salarioMensual) {
+        if (area == null) {
+            return false;
+        }
+        double totalActual = 0;
+        for (Empleado e : empleados) {
+            if (area.equals(e.getArea())) {
+                totalActual += e.getSalarioMensual();
+            }
+        }
+        return totalActual + salarioMensual <= area.getPresupuesto();
+    }
+
+    // ==== ALTAS (CREATE) SIMPLIFICADAS, usando las validaciones ====
+
+    public boolean altaArea(Area area) {
+        if (area == null) return false;
+        for (Area a : areas) {
+            if (a.getNombre().equals(area.getNombre())) {
+                return false;
+            }
+        }
+        areas.add(area);
+        return true;
+    }
+
+    public boolean altaManager(Manager manager) {
+        if (manager == null) return false;
+        if (!esCedulaUnica(manager.getCedula())) return false;
+        managers.add(manager);
+        return true;
+    }
+
+    public boolean altaEmpleado(Empleado empleado) {
+        if (empleado == null) return false;
+        if (!esCedulaUnica(empleado.getCedula())) return false;
+        if (empleado.getManager() != null && !existeManager(empleado.getManager())) return false;
+        if (empleado.getArea() != null && !existeArea(empleado.getArea())) return false;
+        if (empleado.getArea() != null && !hayPresupuestoDisponible(empleado.getArea(), empleado.getSalarioMensual())) return false;
+        empleados.add(empleado);
+        return true;
+    }
+
+    // ==== BAJAS (DELETE) SIMPLIFICADAS ====
+
+    public boolean bajaArea(Area area) {
+        if (area == null || !areas.contains(area)) return false;
+        if (areaContieneEmpleados(area)) return false;
+        areas.remove(area);
+        return true;
+    }
+
+    public boolean bajaManager(Manager manager) {
+        if (manager == null || !managers.contains(manager)) return false;
+        if (managerTieneEmpleados(manager)) return false;
+        managers.remove(manager);
+        return true;
+    }
+
+    public boolean bajaEmpleado(Empleado empleado) {
+        if (empleado == null || !empleados.contains(empleado)) return false;
+        empleados.remove(empleado);
+        return true;
+    }
+
+    // ==== Datos precargados y CVs (de la implementación anterior) ====
+
     public void cargarDatosPrecargados() {
         // Create cvs directory if it doesn't exist
         File cvsDir = new File("cvs");
@@ -129,7 +254,7 @@ public class Sistema {
         crearEmpleadoConCV("Andrea", "García", "33333332", "099333332", 6, 12000,
                           managerLauraTorales, areaSeguridad);
 
-        // Area Comunicaciones - 2 employees (no manager assigned, so using first manager)
+        // Area Comunicaciones - 2 employees
         crearEmpleadoConCV("Sofía", "Pérez", "44444441", "099444441", 4, 15000,
                           managerAnaMartinez, areaComunicaciones);
         crearEmpleadoConCV("Javier", "Ramírez", "44444442", "099444442", 5, 14500,
@@ -207,154 +332,5 @@ public class Sistema {
             System.err.println("Error al crear archivo CV: " + pathCV);
             e.printStackTrace();
         }
-=======
-import java.util.List;
-import java.util.regex.Pattern;
-
-public class Sistema {
-    private List<Manager> managers;
-    private List<Empleado> empleados;
-    private List<Area> areas;
-    
-    public Sistema() {
-        this.managers = new ArrayList<>();
-        this.empleados = new ArrayList<>();
-        this.areas = new ArrayList<>();
-        inicializarDatos();
-    }
-    
-    private void inicializarDatos() {
-        // Crear áreas de ejemplo
-        Area area1 = new Area(1, "Ventas", "Departamento de Ventas", 100000, new Empleado[0]);
-        Area area2 = new Area(2, "Marketing", "Departamento de Marketing", 80000, new Empleado[0]);
-        Area area3 = new Area(3, "IT", "Departamento de Tecnología", 120000, new Empleado[0]);
-        Area area4 = new Area(4, "RRHH", "Recursos Humanos", 90000, new Empleado[0]);
-        
-        areas.add(area1);
-        areas.add(area2);
-        areas.add(area3);
-        areas.add(area4);
-        
-        // Crear managers de ejemplo
-        Manager m1 = new Manager("Carlos Rodríguez", "1.234.567-8", "099 123 456", 15, area1, new Empleado[0]);
-        Manager m2 = new Manager("Ana García", "2.345.678-9", "098 765 432", 12, area2, new Empleado[0]);
-        Manager m3 = new Manager("Pedro Martínez", "3.456.789-0", "099 888 777", 8, area3, new Empleado[0]);
-        
-        managers.add(m1);
-        managers.add(m2);
-        managers.add(m3);
-    }
-    
-    public List<Manager> getManagers() {
-        return managers;
-    }
-    
-    public List<Empleado> getEmpleados() {
-        return empleados;
-    }
-    
-    public List<Area> getAreas() {
-        return areas;
-    }
-    
-    // Validar formato de cédula (formato uruguayo: X.XXX.XXX-X)
-    public boolean validarFormatoCedula(String cedula) {
-        if (cedula == null || cedula.trim().isEmpty()) {
-            return false;
-        }
-        // Patrón para cédula uruguaya: 1.234.567-8 o sin puntos 12345678
-        Pattern pattern = Pattern.compile("^\\d{1}\\.\\d{3}\\.\\d{3}-\\d{1}$|^\\d{7,8}$");
-        return pattern.matcher(cedula.trim()).matches();
-    }
-    
-    // Validar que la cédula sea única en el sistema
-    public boolean esCedulaUnica(String cedula) {
-        // Verificar en managers
-        for (Manager m : managers) {
-            if (m.getCedula().equals(cedula)) {
-                return false;
-            }
-        }
-        // Verificar en empleados
-        for (Empleado e : empleados) {
-            if (e.getCedula().equals(cedula)) {
-                return false;
-            }
-        }
-        return true;
-    }
-    
-    // Validar que la cédula sea única excepto para un manager específico
-    public boolean esCedulaUnicaExcepto(String cedula, String cedulaOriginal) {
-        if (cedula.equals(cedulaOriginal)) {
-            return true;
-        }
-        return esCedulaUnica(cedula);
-    }
-    
-    // Validar formato de celular
-    public boolean validarFormatoCelular(String celular) {
-        if (celular == null || celular.trim().isEmpty()) {
-            return false;
-        }
-        // Formato uruguayo: 09X XXX XXX o 09XXXXXXX
-        Pattern pattern = Pattern.compile("^09\\d{1}\\s?\\d{3}\\s?\\d{3}$|^09\\d{7}$");
-        return pattern.matcher(celular.trim()).matches();
-    }
-    
-    // Agregar un manager
-    public boolean agregarManager(Manager manager) {
-        if (manager == null) {
-            return false;
-        }
-        if (!esCedulaUnica(manager.getCedula())) {
-            return false;
-        }
-        return managers.add(manager);
-    }
-    
-    // Eliminar un manager (solo si no tiene empleados)
-    public boolean eliminarManager(Manager manager) {
-        if (manager == null) {
-            return false;
-        }
-        // Verificar que no tenga empleados a cargo
-        if (manager.getEmpleados() != null && manager.getEmpleados().length > 0) {
-            return false;
-        }
-        return managers.remove(manager);
-    }
-    
-    // Actualizar manager
-    public boolean actualizarManager(Manager manager) {
-        if (manager == null) {
-            return false;
-        }
-        // El manager ya debe estar en la lista
-        int index = managers.indexOf(manager);
-        if (index >= 0) {
-            managers.set(index, manager);
-            return true;
-        }
-        return false;
-    }
-    
-    // Obtener cantidad de empleados a cargo de un manager
-    public int getCantidadEmpleadosACargo(Manager manager) {
-        if (manager == null || manager.getEmpleados() == null) {
-            return 0;
-        }
-        return manager.getEmpleados().length;
-    }
-    
-    // Buscar manager por cédula
-    public Manager buscarManagerPorCedula(String cedula) {
-        for (Manager m : managers) {
-            if (m.getCedula().equals(cedula)) {
-                return m;
-            }
-        }
-        return null;
->>>>>>> origin/copilot/develop-abm-for-managers
     }
 }
