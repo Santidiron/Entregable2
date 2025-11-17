@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Issue #8 - Implementation Summary
 
 ## ✅ All Requirements Completed
@@ -185,7 +184,9 @@ A complete GUI window application for reporting employee movements between areas
 - `Movimiento.java` (extended/fixed as needed)
 - `ReporteMovimientos.java` (new window)
 - `IMPLEMENTATION_SUMMARY.md` (this section)
-=======
+
+---
+
 # Manager ABM Implementation Summary
 
 ## Issue Addressed
@@ -390,4 +391,3 @@ This implementation fully satisfies all requirements specified in Issues #6 and 
 - Thorough testing
 - Clean, maintainable code
 - Zero security vulnerabilities
->>>>>>> origin/copilot/develop-abm-for-managers
