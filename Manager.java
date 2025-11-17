@@ -1,7 +1,6 @@
 //Diego Rocabado
 //Santiago Dirón
 
-public class Manager {
 import java.io.Serializable;
 
 public class Manager implements Serializable {
