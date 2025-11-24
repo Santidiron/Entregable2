@@ -8,6 +8,46 @@ import java.util.*;
 import java.util.List;
 
 public class ReporteEstadoAreas extends JFrame {
+
+    // Clase interna para botones con bordes redondeados (compatible con Windows)
+    private static class RoundedButton extends JButton {
+        private Color backgroundColor;
+
+        public RoundedButton(String text) {
+            super(text);
+            setContentAreaFilled(false);
+            setFocusPainted(false);
+            setBorderPainted(false);
+        }
+
+        @Override
+        public void setBackground(Color bg) {
+            backgroundColor = bg;
+            super.setBackground(bg);
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            if (backgroundColor != null) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(backgroundColor);
+                g2.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
+                g2.dispose();
+            }
+            super.paintComponent(g);
+        }
+
+        @Override
+        protected void paintBorder(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setColor(Color.GRAY);
+            g2.setStroke(new BasicStroke(1.5f));
+            g2.drawRoundRect(1, 1, getWidth() - 3, getHeight() - 3, 20, 20);
+            g2.dispose();
+        }
+    }
     private Sistema sistema;
     private JList<String> areasList;
     private DefaultListModel<String> areasListModel;
@@ -18,6 +58,14 @@ public class ReporteEstadoAreas extends JFrame {
     public ReporteEstadoAreas(Sistema sistema) {
         this.sistema = sistema;
         this.areasDataMap = new HashMap<>();
+
+        // Configurar Look and Feel nativo del sistema (mejor para Windows)
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            // Si falla, usa el Look and Feel por defecto
+        }
+
         initComponents();
     }
 
@@ -163,39 +211,8 @@ public class ReporteEstadoAreas extends JFrame {
             int columna = 0;
 
             for (Empleado emp : empleadosList) {
-                // Crear un botón personalizado con bordes redondeados
-                JButton btnEmpleado = new JButton(emp.getNombre()) {
-                    @Override
-                    protected void paintComponent(Graphics g) {
-                        Graphics2D g2 = (Graphics2D) g.create();
-                        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-                        // Dibujar fondo con bordes redondeados
-                        g2.setColor(getBackground());
-                        g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
-
-                        // Dibujar texto
-                        g2.setColor(getForeground());
-                        g2.setFont(getFont());
-                        FontMetrics fm = g2.getFontMetrics();
-                        int textX = (getWidth() - fm.stringWidth(getText())) / 2;
-                        int textY = ((getHeight() - fm.getHeight()) / 2) + fm.getAscent();
-                        g2.drawString(getText(), textX, textY);
-
-                        g2.dispose();
-                    }
-
-                    @Override
-                    protected void paintBorder(Graphics g) {
-                        Graphics2D g2 = (Graphics2D) g.create();
-                        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                        g2.setColor(Color.GRAY);
-                        g2.setStroke(new BasicStroke(1.5f));
-                        g2.drawRoundRect(1, 1, getWidth() - 3, getHeight() - 3, 20, 20);
-                        g2.dispose();
-                    }
-                };
-
+                // Crear botón con bordes redondeados
+                RoundedButton btnEmpleado = new RoundedButton(emp.getNombre());
                 btnEmpleado.setPreferredSize(new Dimension(160, 45));
                 btnEmpleado.setFont(new Font("Arial", Font.PLAIN, 12));
 
@@ -208,10 +225,6 @@ public class ReporteEstadoAreas extends JFrame {
 
                 btnEmpleado.setBackground(new Color(0, 0, blue));
                 btnEmpleado.setForeground(Color.WHITE);
-                btnEmpleado.setFocusPainted(false);
-                btnEmpleado.setContentAreaFilled(false);
-                btnEmpleado.setOpaque(false);
-                btnEmpleado.setBorderPainted(false);
                 btnEmpleado.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
                 // Agregar listener para mostrar detalles
