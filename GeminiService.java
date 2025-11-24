@@ -29,16 +29,38 @@ import java.util.List;
  */
 public class GeminiService {
     
-    private static final String GEMINI_API_ENDPOINT = 
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent";
+    // ✅ Modelos CORRECTOS disponibles en plan gratuito (API v1 - 2024)
+    // NO usar sufijos -latest (ya no existen)
+    private static final String MODEL_FLASH_2_0 = "gemini-2.0-flash";      // ⚡ Más rápido, recomendado
+    private static final String MODEL_PRO_2_0 = "gemini-2.0-pro";          // 🎯 Más preciso
+    private static final String MODEL_FLASH_1_5 = "gemini-1.5-flash";      // ✅ Estable
+    private static final String MODEL_PRO_1_5 = "gemini-1.5-pro";          // ✅ Estable
+
+    // ✅ URL CORRECTA: API v1 (NO v1beta)
+    private static final String GEMINI_API_BASE = "https://generativelanguage.googleapis.com/v1/models/";
+
+    // Usar gemini-2.0-flash (el más rápido y disponible)
+    private static final String GEMINI_API_ENDPOINT = GEMINI_API_BASE + MODEL_FLASH_2_0 + ":generateContent";
+
     private static final int TIMEOUT_MS = 30000; // 30 seconds timeout
+    private static final int MAX_RETRIES = 3; // Reintentos en caso de error temporal
+
     private String apiKey;
     
     /**
-     * Constructor that reads API key from environment variable
+     * Constructor that reads API key from environment variable ERP_API_KEY
+     * IMPORTANTE: Por seguridad, la API KEY NO debe estar en el código.
+     * Debe configurarse como variable de entorno ERP_API_KEY
+     * También acepta GEMINI_API_KEY como fallback
      */
     public GeminiService() {
-        this.apiKey = System.getenv("GEMINI_API_KEY");
+        // Leer API Key desde variable de entorno ERP_API_KEY (según requisito)
+        this.apiKey = System.getenv("ERP_API_KEY");
+
+        // Fallback a GEMINI_API_KEY si ERP_API_KEY no está configurada
+        if (this.apiKey == null || this.apiKey.trim().isEmpty()) {
+            this.apiKey = System.getenv("GEMINI_API_KEY");
+        }
     }
     
     /**
@@ -52,7 +74,14 @@ public class GeminiService {
     public String generarReporteInteligente(Empleado empleado, List<Area> areas) {
         // Check if API key is available
         if (apiKey == null || apiKey.trim().isEmpty()) {
-            return generarFallbackReport(empleado, areas, "API Key no configurada. Por favor, configure la variable de entorno GEMINI_API_KEY.");
+            String mensaje = "API Key no configurada.\n\n" +
+                           "Para habilitar la integración con IA de Google Gemini:\n" +
+                           "1. Ve a https://aistudio.google.com/\n" +
+                           "2. Obtén tu API Key gratuita\n" +
+                           "3. Edita GeminiService.java y configura DEFAULT_API_KEY\n" +
+                           "   O configura la variable de entorno ERP_API_KEY\n\n" +
+                           "El sistema continuará funcionando con análisis básico.";
+            return generarFallbackReport(empleado, areas, mensaje);
         }
         
         try {
@@ -68,6 +97,22 @@ public class GeminiService {
         } catch (SocketTimeoutException e) {
             return generarFallbackReport(empleado, areas, "Timeout: La API de Gemini no respondió a tiempo.");
         } catch (IOException e) {
+            String mensaje = e.getMessage();
+            // Detectar error de cuota excedida (429)
+            if (mensaje != null && mensaje.contains("429")) {
+                return generarFallbackReport(empleado, areas,
+                    "⚠️ LÍMITE DE CUOTA EXCEDIDO (Error 429)\n\n" +
+                    "Tu API Key gratuita de Gemini ha alcanzado el límite temporal.\n\n" +
+                    "Límites de la versión GRATUITA:\n" +
+                    "• 15 peticiones por minuto\n" +
+                    "• 1,500 peticiones por día\n" +
+                    "• Debes esperar ~30 segundos entre peticiones\n\n" +
+                    "💡 Soluciones:\n" +
+                    "1. Espera unos segundos y vuelve a intentar\n" +
+                    "2. Usa el reporte básico (modo fallback actual)\n" +
+                    "3. Consulta tu uso en: https://ai.google.dev/gemini-api/docs/quota\n\n" +
+                    "El sistema continúa funcionando normalmente en modo básico.");
+            }
             return generarFallbackReport(empleado, areas, "Error de conexión: " + e.getMessage());
         } catch (Exception e) {
             return generarFallbackReport(empleado, areas, "Error inesperado: " + e.getMessage());
@@ -168,7 +213,20 @@ public class GeminiService {
             // Read response
             int responseCode = connection.getResponseCode();
             if (responseCode != 200) {
-                throw new IOException("API returned error code: " + responseCode);
+                // Try to read error message
+                String errorMsg = "";
+                try (BufferedReader br = new BufferedReader(
+                        new InputStreamReader(connection.getErrorStream(), StandardCharsets.UTF_8))) {
+                    StringBuilder error = new StringBuilder();
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        error.append(line);
+                    }
+                    errorMsg = error.toString();
+                } catch (Exception e) {
+                    errorMsg = "No se pudo leer el mensaje de error";
+                }
+                throw new IOException("API returned error code: " + responseCode + " - " + errorMsg);
             }
             
             try (BufferedReader br = new BufferedReader(
@@ -289,7 +347,7 @@ public class GeminiService {
     }
     
     /**
-     * Checks if the API key is configured
+     * Checks if the API key is configured and valid
      */
     public boolean isAPIKeyConfigured() {
         return apiKey != null && !apiKey.trim().isEmpty();

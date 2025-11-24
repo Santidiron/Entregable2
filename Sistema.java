@@ -11,11 +11,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.io.Serializable;
 
 /**
  * Clase principal del sistema que gestiona todas las entidades.
  */
-public class Sistema {
+public class Sistema implements Serializable {
+    private static final long serialVersionUID = 1L;
     private ArrayList<Area> areas;
     private ArrayList<Manager> managers;
     private ArrayList<Empleado> empleados;
