@@ -1,5 +1,5 @@
-//Diego Rocabado
-//Santiago Dirón
+//Diego Rocabado - Número de estudiante: 305310
+//Santiago Dirón - Número de estudiante: 359644
 
 import javax.swing.*;
 import javax.swing.table.*;
@@ -245,8 +245,28 @@ public class ReporteEstadoAreas extends JFrame {
     }
     
     private void showEmpleadoDetails(Empleado empleado) {
-        EmpleadoDetailsDialog dialog = new EmpleadoDetailsDialog(this, empleado);
-        dialog.setVisible(true);
+        mostrarDetallesEmpleado(empleado);
+    }
+
+    private void mostrarDetallesEmpleado(Empleado empleado) {
+        String detalles = String.format(
+            "Legajo: %d\nNombre: %s %s\nCédula: %s\nCelular: %s\nSalario: $%,.2f\nManager: %s\nÁrea: %s",
+            empleado.getLegajo(),
+            empleado.getNombre(),
+            empleado.getApellido(),
+            empleado.getCedula(),
+            empleado.getCelular(),
+            empleado.getSalarioMensual(),
+            empleado.getManager().getNombre(),
+            empleado.getArea().getNombre()
+        );
+
+        JOptionPane.showMessageDialog(
+            this,
+            detalles,
+            "Detalles del Empleado",
+            JOptionPane.INFORMATION_MESSAGE
+        );
     }
     
     // Clase auxiliar para ordenar áreas

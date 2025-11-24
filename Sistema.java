@@ -1,5 +1,5 @@
-//Diego Rocabado
-//Santiago Dirón
+//Diego Rocabado - Número de estudiante: 305310
+//Santiago Dirón - Número de estudiante: 359644
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -122,6 +122,15 @@ public class Sistema {
         return areas.contains(area);
     }
 
+    public boolean existeAreaConNombre(String nombre) {
+        for (Area area : areas) {
+            if (area.getNombre().equalsIgnoreCase(nombre)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private boolean areaContieneEmpleados(Area area) {
         for (Empleado e : empleados) {
             if (area.equals(e.getArea())) {
@@ -214,12 +223,12 @@ public class Sistema {
             cvsDir.mkdir();
         }
 
-        // 1. Create Areas
-        Area areaPersonal = new Area(nextAreaId++, "Personal", "Gestión de recursos humanos", 500000, new Empleado[0]);
-        Area areaRRHH = new Area(nextAreaId++, "RRHH", "Reclutamiento y desarrollo", 450000, new Empleado[0]);
-        Area areaSeguridad = new Area(nextAreaId++, "Seguridad", "Seguridad física y digital", 350000, new Empleado[0]);
-        Area areaComunicaciones = new Area(nextAreaId++, "Comunicaciones", "Comunicación interna y externa", 400000, new Empleado[0]);
-        Area areaMarketing = new Area(nextAreaId++, "Marketing", "Estrategias de mercado", 550000, new Empleado[0]);
+        // 1. Create Areas with EXACT budgets from requirements
+        Area areaPersonal = new Area(nextAreaId++, "Personal", "Reclutamiento de personal, promociones, gestión de cargos", 100000, new Empleado[0]);
+        Area areaRRHH = new Area(nextAreaId++, "RRHH", "Relacionamiento en la empresa, organigrama, gestión de equipos", 80000, new Empleado[0]);
+        Area areaSeguridad = new Area(nextAreaId++, "Seguridad", "Seguridad física, vigilancia, seguridad informática, protocolos y políticas de seguridad", 120000, new Empleado[0]);
+        Area areaComunicaciones = new Area(nextAreaId++, "Comunicaciones", "Comunicaciones internas, reglas y protocolos, comunicaciones con proveedores y clientes", 20000, new Empleado[0]);
+        Area areaMarketing = new Area(nextAreaId++, "Marketing", "Acciones planificadas, publicidad en medios masivos, publicidad en redes, gestión de redes", 95000, new Empleado[0]);
 
         agregarArea(areaPersonal);
         agregarArea(areaRRHH);
@@ -227,11 +236,11 @@ public class Sistema {
         agregarArea(areaComunicaciones);
         agregarArea(areaMarketing);
 
-        // 2. Create Managers
-        Manager managerAnaMartinez = new Manager("Ana Martínez", "12345678", "099123456", 10, areaPersonal, new Empleado[0]);
-        Manager managerRicardoMorales = new Manager("Ricardo Morales", "23456789", "099234567", 8, areaRRHH, new Empleado[0]);
-        Manager managerLauraTorales = new Manager("Laura Torales", "34567890", "099345678", 12, areaSeguridad, new Empleado[0]);
-        Manager managerJuanPabloZapata = new Manager("Juan Pablo Zapata", "45678901", "099456789", 6, areaMarketing, new Empleado[0]);
+        // 2. Create Managers with EXACT data from requirements
+        Manager managerAnaMartinez = new Manager("Ana Martínez", "4.568.369-1", "099123456", 10, areaPersonal, new Empleado[0]);
+        Manager managerRicardoMorales = new Manager("Ricardo Morales", "3.214.589-3", "094121212", 4, areaRRHH, new Empleado[0]);
+        Manager managerLauraTorales = new Manager("Laura Torales", "3.589.257-5", "099654321", 1, areaSeguridad, new Empleado[0]);
+        Manager managerJuanPabloZapata = new Manager("Juan Pablo Zapata", "4.555.197-7", "099202020", 5, areaMarketing, new Empleado[0]);
 
         agregarManager(managerAnaMartinez);
         agregarManager(managerRicardoMorales);
@@ -357,15 +366,15 @@ public class Sistema {
     }
 
     // Modificar descripción de un área existente
-    public void modificarArea(Area area, String nuevaDescripcion) {
+    public void modificarDescripcionArea(Area area, String nuevaDescripcion) {
         if (area == null || nuevaDescripcion == null) return;
         area.setDescripcion(nuevaDescripcion);
     }
 
-    // Eliminar área devolviendo booleano
-    public boolean eliminarArea(Area area) {
-        return bajaArea(area);
+    public void modificarArea(Area area, String nuevaDescripcion) {
+        modificarDescripcionArea(area, nuevaDescripcion);
     }
+
 
     // Áreas ordenadas alfabéticamente por nombre
     public List<Area> getAreasSortedByName() {
@@ -522,10 +531,6 @@ public class Sistema {
         return null;
     }
 
-    public boolean agregarManager(Manager manager) {
-        return altaManager(manager);
-    }
-
     public boolean actualizarManager(Manager manager) {
         // En esta implementación, el Manager ya se actualizó desde la GUI
         // Solo verificamos formato del celular y devolvemos true si es válido
@@ -534,9 +539,5 @@ public class Sistema {
             return false;
         }
         return true;
-    }
-
-    public boolean eliminarManager(Manager manager) {
-        return bajaManager(manager);
     }
 }

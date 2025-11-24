@@ -1,5 +1,5 @@
-//Diego Rocabado
-//Santiago Dirón
+//Diego Rocabado - Número de estudiante: 305310
+//Santiago Dirón - Número de estudiante: 359644
 
 import java.io.Serializable;
 

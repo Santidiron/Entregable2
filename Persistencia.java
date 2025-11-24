@@ -1,5 +1,5 @@
-//Diego Rocabado
-//Santiago Dirón
+//Diego Rocabado - Número de estudiante: 305310
+//Santiago Dirón - Número de estudiante: 359644
 
 import java.io.*;
 
@@ -41,7 +41,7 @@ public class Persistencia {
      * @throws IOException Si hay error al leer el archivo
      * @throws ClassNotFoundException Si no se encuentra la clase del objeto
      */
-    public Object cargarDatos(String nombreArchivo) throws IOException, ClassNotFoundException {
+    public Sistema cargarDatos(String nombreArchivo) throws IOException, ClassNotFoundException {
         if (nombreArchivo == null || nombreArchivo.trim().isEmpty()) {
             throw new IllegalArgumentException("El nombre del archivo no puede ser nulo o vacío");
         }
@@ -50,7 +50,7 @@ public class Persistencia {
         }
         
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(nombreArchivo))) {
-            return ois.readObject();
+            return (Sistema) ois.readObject();
         }
     }
 
