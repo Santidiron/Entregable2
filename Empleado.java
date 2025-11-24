@@ -31,7 +31,6 @@ public class Empleado implements Serializable {
         this.area = area;
     }
 
-    // Getters and Setters
     public int getLegajo() {
         return legajo;
     }

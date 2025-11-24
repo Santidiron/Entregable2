@@ -44,15 +44,12 @@ public class ReporteMovimientos extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         
-        // Panel principal
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
-        // Panel de filtros
         JPanel panelFiltros = crearPanelFiltros();
         mainPanel.add(panelFiltros, BorderLayout.NORTH);
         
-        // Tabla de movimientos
         String[] columnas = {"Mes", "Área Origen", "Área Destino", "Empleado", "Fecha"};
         tableModel = new DefaultTableModel(columnas, 0) {
             @Override
@@ -67,7 +64,6 @@ public class ReporteMovimientos extends JFrame {
         JScrollPane scrollPane = new JScrollPane(tableMovimientos);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
         
-        // Panel de botones
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         btnExportarCSV = new JButton("Exportar a CSV");
         btnExportarCSV.addActionListener(new ActionListener() {
@@ -89,7 +85,6 @@ public class ReporteMovimientos extends JFrame {
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         
-        // Filtro por mes
         gbc.gridx = 0;
         gbc.gridy = 0;
         panel.add(new JLabel("Mes:"), gbc);
@@ -99,7 +94,6 @@ public class ReporteMovimientos extends JFrame {
         comboMes = new JComboBox<>(meses);
         panel.add(comboMes, gbc);
         
-        // Filtro por área
         gbc.gridx = 2;
         gbc.gridy = 0;
         panel.add(new JLabel("Área:"), gbc);
@@ -112,7 +106,6 @@ public class ReporteMovimientos extends JFrame {
         }
         panel.add(comboArea, gbc);
         
-        // Filtro por empleado
         gbc.gridx = 4;
         gbc.gridy = 0;
         panel.add(new JLabel("Empleado:"), gbc);
@@ -121,7 +114,6 @@ public class ReporteMovimientos extends JFrame {
         txtEmpleado = new JTextField(15);
         panel.add(txtEmpleado, gbc);
         
-        // Botones
         gbc.gridx = 6;
         gbc.gridy = 0;
         btnAplicarFiltros = new JButton("Aplicar Filtros");
@@ -147,7 +139,6 @@ public class ReporteMovimientos extends JFrame {
     }
     
     private void cargarDatos() {
-        // Ordenar por mes (más reciente primero)
         movimientosFiltrados.sort(new Comparator<Movimiento>() {
             @Override
             public int compare(Movimiento m1, Movimiento m2) {
@@ -190,20 +181,17 @@ public class ReporteMovimientos extends JFrame {
             boolean cumpleArea = true;
             boolean cumpleEmpleado = true;
             
-            // Filtro por mes
             if (!"Todos".equals(mesSeleccionado)) {
                 int mes = Integer.parseInt(mesSeleccionado);
                 cumpleMes = mov.getMes() == mes;
             }
             
-            // Filtro por área (origen o destino)
             if (!"Todas".equals(areaSeleccionada)) {
                 String areaOrigen = mov.getAreaOrigen() != null ? mov.getAreaOrigen().getNombre() : "";
                 String areaDestino = mov.getAreaDestino() != null ? mov.getAreaDestino().getNombre() : "";
                 cumpleArea = areaOrigen.equals(areaSeleccionada) || areaDestino.equals(areaSeleccionada);
             }
             
-            // Filtro por empleado
             if (!empleadoBuscado.isEmpty() && mov.getEmpleado() != null) {
                 String nombreCompleto = (mov.getEmpleado().getNombre() + " " + 
                     mov.getEmpleado().getApellido()).toLowerCase();
@@ -215,7 +203,6 @@ public class ReporteMovimientos extends JFrame {
             }
         }
         
-        // Ordenar por mes (más reciente primero)
         movimientosFiltrados.sort(new Comparator<Movimiento>() {
             @Override
             public int compare(Movimiento m1, Movimiento m2) {
@@ -235,7 +222,6 @@ public class ReporteMovimientos extends JFrame {
     }
     
     private void exportarCSV() {
-        // Validar que hay datos para exportar
         if (movimientosFiltrados.isEmpty()) {
             JOptionPane.showMessageDialog(this,
                 "No hay datos para exportar.",
@@ -244,7 +230,6 @@ public class ReporteMovimientos extends JFrame {
             return;
         }
         
-        // Abrir JFileChooser
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Guardar archivo CSV");
         fileChooser.setSelectedFile(new File("movimientos.csv"));
@@ -254,7 +239,6 @@ public class ReporteMovimientos extends JFrame {
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             File fileToSave = fileChooser.getSelectedFile();
             
-            // Agregar extensión .csv si no la tiene
             if (!fileToSave.getName().toLowerCase().endsWith(".csv")) {
                 fileToSave = new File(fileToSave.getAbsolutePath() + ".csv");
             }
@@ -278,11 +262,9 @@ public class ReporteMovimientos extends JFrame {
         try (BufferedWriter writer = new BufferedWriter(
                 new FileWriter(archivo, StandardCharsets.UTF_8))) {
             
-            // Escribir encabezados
             writer.write("Mes,Area Origen,Area Destino,Empleado,Fecha");
             writer.newLine();
             
-            // Escribir datos
             for (Movimiento mov : movimientosFiltrados) {
                 String areaOrigen = mov.getAreaOrigen() != null ? 
                     escaparCSV(mov.getAreaOrigen().getNombre()) : "N/A";
@@ -303,21 +285,17 @@ public class ReporteMovimientos extends JFrame {
         if (valor == null) {
             return "";
         }
-        // Si el valor contiene comas, comillas o saltos de línea, encerrarlo entre comillas
         if (valor.contains(",") || valor.contains("\"") || valor.contains("\n")) {
-            // Duplicar las comillas dentro del valor
             valor = valor.replace("\"", "\"\"");
             return "\"" + valor + "\"";
         }
         return valor;
     }
     
-    // Método main para pruebas
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                // Crear datos de prueba
                 List<Area> areas = new ArrayList<>();
                 Area area1 = new Area(1, "Desarrollo", "Area de desarrollo", 100000, null);
                 Area area2 = new Area(2, "Testing", "Area de testing", 80000, null);

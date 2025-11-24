@@ -1,0 +1,14 @@
+/nbproject/private/
+/build/
+/dist/
+
+# Archivos sensibles - NO subir a GitHub
+API_KEY_CONFIGURADA.txt
+SOLUCION_ERROR_403.txt
+configurar_mi_api_key.bat
+*_api_key*.bat
+*.dat
+
+# Archivos compilados
+*.class
+

@@ -13,9 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.io.Serializable;
 
-/**
- * Clase principal del sistema que gestiona todas las entidades.
- */
 public class Sistema implements Serializable {
     private static final long serialVersionUID = 1L;
     private ArrayList<Area> areas;
@@ -34,7 +31,6 @@ public class Sistema implements Serializable {
         this.nextLegajo = 1000;
     }
 
-    // Getters como List (para compatibilidad con código que use List)
     public List<Area> getAreas() {
         return areas;
     }
@@ -51,28 +47,22 @@ public class Sistema implements Serializable {
         return movimientos;
     }
 
-    // Métodos para gestionar Áreas (API simple)
     public void agregarArea(Area area) {
         areas.add(area);
     }
 
-    // Cambiamos a boolean para compatibilidad con tests y demos
     public boolean eliminarArea(Area area) {
         return bajaArea(area);
     }
 
-    // Métodos para gestionar Managers
-    // Cambiamos a boolean para compatibilidad con tests y GUI
     public boolean agregarManager(Manager manager) {
         return altaManager(manager);
     }
 
-    // Cambiamos a boolean y delegamos en bajaManager
     public boolean eliminarManager(Manager manager) {
         return bajaManager(manager);
     }
 
-    // Métodos para gestionar Empleados
     public void agregarEmpleado(Empleado empleado) {
         empleados.add(empleado);
     }
@@ -81,14 +71,11 @@ public class Sistema implements Serializable {
         empleados.remove(empleado);
     }
 
-    // Check if system has data
     public boolean tieneDatos() {
         return !areas.isEmpty() || !managers.isEmpty() || !empleados.isEmpty() || !movimientos.isEmpty();
     }
 
-    // ==== Lógica de validación y reglas de negocio (resumida) ====
 
-    // Validar formato de cédula (formato uruguayo aproximado)
     public boolean validarFormatoCedula(String cedula) {
         if (cedula == null || cedula.trim().isEmpty()) {
             return false;
@@ -97,7 +84,6 @@ public class Sistema implements Serializable {
         return pattern.matcher(cedula.trim()).matches();
     }
 
-    // Validar que la cédula sea única en el sistema
     public boolean esCedulaUnica(String cedula) {
         if (cedula == null) {
             return false;
@@ -115,7 +101,6 @@ public class Sistema implements Serializable {
         return true;
     }
 
-    // Métodos de ayuda que se intuyen desde el archivo original (presupuestos, existencia, etc.)
     private boolean existeManager(Manager manager) {
         return managers.contains(manager);
     }
@@ -164,7 +149,6 @@ public class Sistema implements Serializable {
         return totalActual + salarioMensual <= area.getPresupuesto();
     }
 
-    // ==== ALTAS (CREATE) SIMPLIFICADAS, usando las validaciones ====
 
     public boolean altaArea(Area area) {
         if (area == null) return false;
@@ -194,7 +178,6 @@ public class Sistema implements Serializable {
         return true;
     }
 
-    // ==== BAJAS (DELETE) SIMPLIFICADAS ====
 
     public boolean bajaArea(Area area) {
         if (area == null || !areas.contains(area)) return false;
@@ -216,16 +199,13 @@ public class Sistema implements Serializable {
         return true;
     }
 
-    // ==== Datos precargados y CVs (de la implementación anterior) ====
 
     public void cargarDatosPrecargados() {
-        // Create cvs directory if it doesn't exist
         File cvsDir = new File("cvs");
         if (!cvsDir.exists()) {
             cvsDir.mkdir();
         }
 
-        // 1. Create Areas with EXACT budgets from requirements
         Area areaPersonal = new Area(nextAreaId++, "Personal", "Reclutamiento de personal, promociones, gestión de cargos", 100000, new Empleado[0]);
         Area areaRRHH = new Area(nextAreaId++, "RRHH", "Relacionamiento en la empresa, organigrama, gestión de equipos", 80000, new Empleado[0]);
         Area areaSeguridad = new Area(nextAreaId++, "Seguridad", "Seguridad física, vigilancia, seguridad informática, protocolos y políticas de seguridad", 120000, new Empleado[0]);
@@ -238,7 +218,6 @@ public class Sistema implements Serializable {
         agregarArea(areaComunicaciones);
         agregarArea(areaMarketing);
 
-        // 2. Create Managers with EXACT data from requirements
         Manager managerAnaMartinez = new Manager("Ana Martínez", "4.568.369-1", "099123456", 10, areaPersonal, new Empleado[0]);
         Manager managerRicardoMorales = new Manager("Ricardo Morales", "3.214.589-3", "094121212", 4, areaRRHH, new Empleado[0]);
         Manager managerLauraTorales = new Manager("Laura Torales", "3.589.257-5", "099654321", 1, areaSeguridad, new Empleado[0]);
@@ -249,14 +228,11 @@ public class Sistema implements Serializable {
         agregarManager(managerLauraTorales);
         agregarManager(managerJuanPabloZapata);
 
-        // 3. Create Employees for each area
-        // Area Personal - 2 employees
         crearEmpleadoConCV("Carlos", "González", "11111111", "099111111", 5, 18000,
                           managerAnaMartinez, areaPersonal);
         crearEmpleadoConCV("María", "Rodríguez", "11111112", "099111112", 3, 16000,
                           managerAnaMartinez, areaPersonal);
 
-        // Area RRHH - 3 employees
         crearEmpleadoConCV("Pedro", "Sánchez", "22222221", "099222221", 7, 11000,
                           managerRicardoMorales, areaRRHH);
         crearEmpleadoConCV("Lucía", "Fernández", "22222222", "099222222", 4, 10500,
@@ -264,19 +240,16 @@ public class Sistema implements Serializable {
         crearEmpleadoConCV("Diego", "Martín", "22222223", "099222223", 2, 9500,
                           managerRicardoMorales, areaRRHH);
 
-        // Area Seguridad - 2 employees
         crearEmpleadoConCV("Roberto", "López", "33333331", "099333331", 9, 13500,
                           managerLauraTorales, areaSeguridad);
         crearEmpleadoConCV("Andrea", "García", "33333332", "099333332", 6, 12000,
                           managerLauraTorales, areaSeguridad);
 
-        // Area Comunicaciones - 2 employees
         crearEmpleadoConCV("Sofía", "Pérez", "44444441", "099444441", 4, 15000,
                           managerAnaMartinez, areaComunicaciones);
         crearEmpleadoConCV("Javier", "Ramírez", "44444442", "099444442", 5, 14500,
                           managerAnaMartinez, areaComunicaciones);
 
-        // Area Marketing - 3 employees
         crearEmpleadoConCV("Valentina", "Torres", "55555551", "099555551", 8, 14000,
                           managerJuanPabloZapata, areaMarketing);
         crearEmpleadoConCV("Mateo", "Flores", "55555552", "099555552", 3, 13000,
@@ -284,7 +257,6 @@ public class Sistema implements Serializable {
         crearEmpleadoConCV("Isabella", "Vega", "55555553", "099555553", 5, 13500,
                           managerJuanPabloZapata, areaMarketing);
 
-        // 4. Create historical movements
         if (empleados.size() >= 5) {
             Empleado emp1 = empleados.get(0);
             Empleado emp2 = empleados.get(2);
@@ -306,21 +278,17 @@ public class Sistema implements Serializable {
         }
     }
 
-    // Helper method to create employee with CV file
     private void crearEmpleadoConCV(String nombre, String apellido, String cedula, String celular,
                                    int antiguedad, double salario, Manager manager, Area area) {
         String pathCV = "cvs/cv_" + nombre.toLowerCase() + "_" + apellido.toLowerCase() + ".txt";
 
-        // Create CV file
         crearArchivoCV(pathCV, nombre, apellido, cedula, celular, antiguedad);
 
-        // Create employee
         Empleado empleado = new Empleado(nextLegajo++, nombre, apellido, cedula, celular,
                                         pathCV, antiguedad, salario, manager, area);
         agregarEmpleado(empleado);
     }
 
-    // Helper method to create CV file
     private void crearArchivoCV(String pathCV, String nombre, String apellido,
                                String cedula, String celular, int antiguedad) {
         try {
@@ -350,13 +318,10 @@ public class Sistema implements Serializable {
         }
     }
 
-    // ==== API de Áreas requerida por tests y GUI ====
 
-    // Sobrecarga: crear y agregar área devolviendo el objeto
     public Area agregarArea(String nombre, String descripcion, int presupuestoAnual) {
         if (nombre == null || nombre.trim().isEmpty()) return null;
         if (presupuestoAnual <= 0) return null;
-        // nombre único
         for (Area a : areas) {
             if (a.getNombre().equalsIgnoreCase(nombre.trim())) {
                 return null;
@@ -367,7 +332,6 @@ public class Sistema implements Serializable {
         return area;
     }
 
-    // Modificar descripción de un área existente
     public void modificarDescripcionArea(Area area, String nuevaDescripcion) {
         if (area == null || nuevaDescripcion == null) return;
         area.setDescripcion(nuevaDescripcion);
@@ -378,14 +342,12 @@ public class Sistema implements Serializable {
     }
 
 
-    // Áreas ordenadas alfabéticamente por nombre
     public List<Area> getAreasSortedByName() {
         List<Area> copia = new ArrayList<>(areas);
         copia.sort(Comparator.comparing(a -> a.getNombre().toLowerCase()));
         return copia;
     }
 
-    // Buscar área por id
     public Area buscarAreaPorId(int id) {
         for (Area a : areas) {
             if (a.getId() == id) return a;
@@ -393,7 +355,6 @@ public class Sistema implements Serializable {
         return null;
     }
 
-    // ==== API de validaciones usada en tests de empleados ====
 
     public boolean validarCedulaUnica(String cedula) {
         return esCedulaUnica(cedula);
@@ -407,7 +368,7 @@ public class Sistema implements Serializable {
                 totalActual += e.getSalarioMensual();
             }
         }
-        double disponible = area.getPresupuesto() - totalActual * 12; // presupuestos anuales
+        double disponible = area.getPresupuesto() - totalActual * 12;
         return salarioMensual * 12 <= disponible;
     }
 
@@ -417,7 +378,6 @@ public class Sistema implements Serializable {
         return c.matches("^09\\d{7}$");
     }
 
-    // ==== API de empleados ====
 
     public int generarLegajo() {
         return nextLegajo++;
@@ -484,7 +444,6 @@ public class Sistema implements Serializable {
         }
     }
 
-    // ==== Movimientos ====
 
     public void registrarMovimiento(Movimiento movimiento) {
         if (movimiento != null) {
@@ -492,29 +451,51 @@ public class Sistema implements Serializable {
         }
     }
 
-    public boolean moverEmpleado(Empleado empleado, Area nuevaArea) {
+    public boolean moverEmpleado(Empleado empleado, Area nuevaArea, int mes) {
         if (empleado == null || nuevaArea == null) return false;
-        // validar presupuesto destino
-        if (!validarPresupuestoArea(nuevaArea, (int) empleado.getSalarioMensual())) {
+        if (mes < 1 || mes > 12) return false;
+
+        Area areaOrigen = empleado.getArea();
+        if (areaOrigen == null) return false;
+
+        if (areaOrigen.getId() == nuevaArea.getId()) return false;
+
+        int mesesRestantes = 13 - mes;
+
+        double costoParaDestino = empleado.getSalarioMensual() * mesesRestantes;
+
+        double liberacionOrigen = empleado.getSalarioMensual() * mesesRestantes;
+
+        double presupuestoUsadoDestino = calcularPresupuestoUsado(nuevaArea);
+        double presupuestoDisponibleDestino = nuevaArea.getPresupuestoAnual() - presupuestoUsadoDestino;
+
+        if (presupuestoDisponibleDestino < costoParaDestino) {
             return false;
         }
-        Area origen = empleado.getArea();
+
         empleado.setArea(nuevaArea);
-        // Registrar movimiento
-        Movimiento movimiento = new Movimiento(0, java.time.LocalDate.now().toString(),
-                                               empleado, origen, nuevaArea);
+
+        Movimiento movimiento = new Movimiento(mes, java.time.LocalDate.now().toString(),
+                                               empleado, areaOrigen, nuevaArea);
         movimientos.add(movimiento);
-        // Ajustar presupuestos (simplificado: ajustar atributos en Area)
-        if (origen != null) {
-            int nuevoPresOrigen = origen.getPresupuestoAnual() + (int) (empleado.getSalarioMensual() * 12);
-            origen.setPresupuestoAnual(nuevoPresOrigen);
-        }
-        int nuevoPresDestino = nuevaArea.getPresupuestoAnual() - (int) (empleado.getSalarioMensual() * 12);
-        nuevaArea.setPresupuestoAnual(nuevoPresDestino);
+
         return true;
     }
 
-    // ==== API para managers usada por GUI y tests ====
+    public boolean moverEmpleado(Empleado empleado, Area nuevaArea) {
+        return moverEmpleado(empleado, nuevaArea, 1);
+    }
+
+    private double calcularPresupuestoUsado(Area area) {
+        double presupuestoUsado = 0;
+        for (Empleado emp : empleados) {
+            if (emp.getArea() != null && emp.getArea().getId() == area.getId()) {
+                presupuestoUsado += emp.getSalarioMensual() * 12;
+            }
+        }
+        return presupuestoUsado;
+    }
+
 
     public int getCantidadEmpleadosACargo(Manager manager) {
         int count = 0;
@@ -534,8 +515,6 @@ public class Sistema implements Serializable {
     }
 
     public boolean actualizarManager(Manager manager) {
-        // En esta implementación, el Manager ya se actualizó desde la GUI
-        // Solo verificamos formato del celular y devolvemos true si es válido
         if (manager == null) return false;
         if (!validarFormatoCelular(manager.getCelular())) {
             return false;

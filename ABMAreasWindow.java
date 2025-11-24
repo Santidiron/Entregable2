@@ -24,22 +24,19 @@ public class ABMAreasWindow extends JFrame
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
         
-        // panel principapl
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
-        //crear tablas
         String[] columnNames = {"ID", "Nombre", "Descripción", "Presupuesto"};
         modeloTabla = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Make table read-only
+                return false;
             }
         };
         tablaAreas = new JTable(modeloTabla);
         JScrollPane scrollPane = new JScrollPane(tablaAreas);
         
-        // crea formulario
         JPanel formPanel = new JPanel(new GridBagLayout());
         formPanel.setBorder(BorderFactory.createTitledBorder("Datos del Área"));
         GridBagConstraints gbc = new GridBagConstraints();
@@ -90,7 +87,6 @@ public class ABMAreasWindow extends JFrame
         buttonPanel.add(btnEliminar);
         buttonPanel.add(btnMovimiento);
         
-        //eventos de votones
         btnAgregar.addActionListener(e -> agregarArea());
         btnModificar.addActionListener(e -> modificarArea());
         btnEliminar.addActionListener(e -> eliminarArea());

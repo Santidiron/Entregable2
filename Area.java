@@ -20,7 +20,6 @@ public class Area implements Serializable {
         this.empleados = empleados;
     }
 
-    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -45,7 +44,6 @@ public class Area implements Serializable {
     public void setPresupuestoAnual(int presupuestoAnual) {
         this.presupuestoAnual = presupuestoAnual;
     }
-    // Compatibilidad con código que usa getPresupuesto
     public int getPresupuesto() {
         return presupuestoAnual;
     }

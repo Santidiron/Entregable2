@@ -22,7 +22,6 @@ public class EmpleadoEditDialog extends JDialog {
     private void initComponents() {
         setLayout(new BorderLayout(10, 10));
 
-        // Panel de información (solo lectura)
         JPanel panelInfo = new JPanel(new GridLayout(5, 2, 5, 5));
         panelInfo.setBorder(BorderFactory.createTitledBorder("Información del Empleado"));
 
@@ -41,7 +40,6 @@ public class EmpleadoEditDialog extends JDialog {
         panelInfo.add(new JLabel("Área:"));
         panelInfo.add(new JLabel(empleado.getArea() != null ? empleado.getArea().getNombre() : "N/A"));
 
-        // Panel de edición
         JPanel panelEdicion = new JPanel(new GridLayout(2, 2, 5, 5));
         panelEdicion.setBorder(BorderFactory.createTitledBorder("Datos Editables"));
 
@@ -53,7 +51,6 @@ public class EmpleadoEditDialog extends JDialog {
         txtSalario = new JTextField(String.valueOf(empleado.getSalarioMensual()));
         panelEdicion.add(txtSalario);
 
-        // Panel de botones
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         btnGuardar = new JButton("Guardar");
         btnGuardar.addActionListener(e -> guardarCambios());
@@ -62,7 +59,6 @@ public class EmpleadoEditDialog extends JDialog {
         panelBotones.add(btnGuardar);
         panelBotones.add(btnCancelar);
 
-        // Agregar paneles
         JPanel panelCentral = new JPanel(new GridLayout(2, 1, 10, 10));
         panelCentral.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panelCentral.add(panelInfo);
@@ -77,7 +73,6 @@ public class EmpleadoEditDialog extends JDialog {
 
     private void guardarCambios() {
         try {
-            // Validar celular
             String celular = txtCelular.getText().trim();
             if (!celular.isEmpty() && !celular.matches("\\d{8,15}")) {
                 JOptionPane.showMessageDialog(this, 
@@ -87,7 +82,6 @@ public class EmpleadoEditDialog extends JDialog {
                 return;
             }
 
-            // Validar salario
             double salario;
             try {
                 salario = Double.parseDouble(txtSalario.getText().trim());
@@ -102,7 +96,6 @@ public class EmpleadoEditDialog extends JDialog {
                 return;
             }
 
-            // Actualizar empleado
             sistema.actualizarEmpleado(empleado, celular, salario);
 
             JOptionPane.showMessageDialog(this, 

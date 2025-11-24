@@ -5,9 +5,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-/**
- * Ventana principal de la aplicación con menú y panel central dinámico.
- */
 public class VentanaPrincipal extends JFrame {
     private Sistema sistema;
     private JPanel panelCentral;
@@ -32,9 +29,6 @@ public class VentanaPrincipal extends JFrame {
         setLayout(new BorderLayout());
     }
 
-    /**
-     * Configura el listener para la tecla F1 que muestra información de autores
-     */
     private void configurarF1() {
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
             @Override
@@ -48,9 +42,6 @@ public class VentanaPrincipal extends JFrame {
         });
     }
 
-    /**
-     * Muestra ventana con información detallada de los autores
-     */
     private void mostrarInformacionAutores() {
         JDialog dialogo = new JDialog(this, "Información de Autores", true);
         dialogo.setSize(400, 300);
@@ -123,9 +114,6 @@ public class VentanaPrincipal extends JFrame {
         dialogo.setVisible(true);
     }
 
-    /**
-     * Configura la persistencia automática al cerrar la aplicación
-     */
     private void configurarPersistenciaAutomatica() {
         addWindowListener(new WindowAdapter() {
             @Override
@@ -166,7 +154,6 @@ public class VentanaPrincipal extends JFrame {
     private void crearMenuBar() {
         JMenuBar menuBar = new JMenuBar();
 
-        // ===== MENÚ ARCHIVO =====
         JMenu menuArchivo = new JMenu("Archivo");
 
         JMenuItem itemGuardar = new JMenuItem("Guardar");
@@ -229,7 +216,6 @@ public class VentanaPrincipal extends JFrame {
         menuArchivo.addSeparator();
         menuArchivo.add(itemSalir);
 
-        // ===== MENÚ ÁREAS =====
         JMenu menuAreas = new JMenu("Áreas");
 
         JMenuItem itemAltaArea = new JMenuItem("Alta");
@@ -262,7 +248,6 @@ public class VentanaPrincipal extends JFrame {
         menuAreas.addSeparator();
         menuAreas.add(itemRealizarMovimiento);
 
-        // ===== MENÚ MANAGERS =====
         JMenu menuManagers = new JMenu("Managers");
 
         JMenuItem itemAltaManager = new JMenuItem("Alta");
@@ -287,7 +272,6 @@ public class VentanaPrincipal extends JFrame {
         menuManagers.add(itemBajaManager);
         menuManagers.add(itemModificacionManager);
 
-        // ===== MENÚ EMPLEADOS =====
         JMenu menuEmpleados = new JMenu("Empleados");
 
         JMenuItem itemAltaEmpleado = new JMenuItem("Alta");
@@ -298,7 +282,6 @@ public class VentanaPrincipal extends JFrame {
 
         menuEmpleados.add(itemAltaEmpleado);
 
-        // ===== MENÚ REPORTES =====
         JMenu menuReportes = new JMenu("Reportes");
 
         JMenuItem itemReporteInteligente = new JMenuItem("Reporte inteligente");
@@ -329,7 +312,6 @@ public class VentanaPrincipal extends JFrame {
         menuReportes.add(itemReporteEstadoAreas);
         menuReportes.add(itemReporteMovimientos);
 
-        // Agregar menús a la barra
         menuBar.add(menuArchivo);
         menuBar.add(menuAreas);
         menuBar.add(menuManagers);
@@ -340,12 +322,10 @@ public class VentanaPrincipal extends JFrame {
     }
 
     private void inicializarComponentes() {
-        // Panel Central
         panelCentral = new JPanel();
         panelCentral.setLayout(new BorderLayout());
         panelCentral.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // Panel de bienvenida por defecto
         JPanel panelBienvenida = new JPanel();
         panelBienvenida.setLayout(new BoxLayout(panelBienvenida, BoxLayout.Y_AXIS));
 
@@ -366,7 +346,6 @@ public class VentanaPrincipal extends JFrame {
         panelCentral.add(panelBienvenida, BorderLayout.CENTER);
         add(panelCentral, BorderLayout.CENTER);
 
-        // Barra de Estado
         JPanel panelEstado = new JPanel();
         panelEstado.setLayout(new FlowLayout(FlowLayout.LEFT));
         panelEstado.setBorder(BorderFactory.createEtchedBorder());
@@ -377,9 +356,6 @@ public class VentanaPrincipal extends JFrame {
         add(panelEstado, BorderLayout.SOUTH);
     }
 
-    /**
-     * Método para cambiar el contenido del panel central.
-     */
     public void cambiarPanelCentral(JPanel nuevoPanel) {
         panelCentral.removeAll();
         panelCentral.add(nuevoPanel, BorderLayout.CENTER);
@@ -387,9 +363,6 @@ public class VentanaPrincipal extends JFrame {
         panelCentral.repaint();
     }
 
-    /**
-     * Método para actualizar el texto de la barra de estado.
-     */
     public void actualizarEstado(String mensaje) {
         labelEstado.setText(mensaje);
     }

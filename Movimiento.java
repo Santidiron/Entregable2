@@ -7,7 +7,7 @@ public class Movimiento implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private int mes;
-    private String Fecha; // "Ingreso" o "Egreso"
+    private String Fecha;
     private Empleado empleado;
     private Area areaOrigen;
     private Area areaDestino;
@@ -19,7 +19,6 @@ public class Movimiento implements Serializable {
         this.areaOrigen = areaOrigen;
         this.areaDestino = areaDestino;
     }
-    // Getters and Setters
     public int getMes() {
         return mes;
     }

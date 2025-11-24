@@ -12,22 +12,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Window for generating intelligent reports about employee area transitions.
- * Uses the GeminiService to generate AI-powered analysis.
- * 
- * Features:
- * - Employee selection via combo box
- * - Display of employee information
- * - Area selection with checkboxes
- * - AI-powered report generation
- * - Loading indicator
- * - Report export to text file
- * - Background processing to avoid UI freezing
- * 
- * @author Diego Rocabado
- * @author Santiago Dirón
- */
 public class ReporteInteligenteWindow extends JFrame {
     
     private JComboBox<String> comboEmpleados;
@@ -42,11 +26,6 @@ public class ReporteInteligenteWindow extends JFrame {
     private List<Area> areas;
     private GeminiService geminiService;
     
-    /**
-     * Constructor
-     * @param empleados List of employees to analyze
-     * @param areas List of available areas
-     */
     public ReporteInteligenteWindow(List<Empleado> empleados, List<Area> areas) {
         this.empleados = empleados;
         this.areas = areas;
@@ -56,26 +35,19 @@ public class ReporteInteligenteWindow extends JFrame {
         initializeUI();
     }
     
-    /**
-     * Initializes the user interface
-     */
     private void initializeUI() {
         setTitle("Reporte Inteligente - Análisis de Transición de Empleados");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(900, 700);
         setLocationRelativeTo(null);
         
-        // Main panel
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(new EmptyBorder(15, 15, 15, 15));
         
-        // Top panel - Employee selection and info
         JPanel topPanel = createTopPanel();
         
-        // Center panel - Areas selection and results
         JPanel centerPanel = createCenterPanel();
         
-        // Bottom panel - Action buttons
         JPanel bottomPanel = createBottomPanel();
         
         mainPanel.add(topPanel, BorderLayout.NORTH);
@@ -84,7 +56,6 @@ public class ReporteInteligenteWindow extends JFrame {
         
         add(mainPanel);
         
-        // Check if API key is configured
         if (!geminiService.isAPIKeyConfigured()) {
             JOptionPane.showMessageDialog(this,
                 "Advertencia: La API Key de Gemini no está configurada.\n" +
@@ -95,13 +66,9 @@ public class ReporteInteligenteWindow extends JFrame {
         }
     }
     
-    /**
-     * Creates the top panel with employee selection
-     */
     private JPanel createTopPanel() {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         
-        // Employee selection
         JPanel selectionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         selectionPanel.add(new JLabel("Seleccionar Empleado:"));
         
@@ -118,7 +85,6 @@ public class ReporteInteligenteWindow extends JFrame {
         });
         selectionPanel.add(comboEmpleados);
         
-        // Employee info panel
         JPanel infoPanel = new JPanel(new BorderLayout());
         infoPanel.setBorder(new TitledBorder("Información del Empleado"));
         
@@ -132,7 +98,6 @@ public class ReporteInteligenteWindow extends JFrame {
         panel.add(selectionPanel, BorderLayout.NORTH);
         panel.add(infoPanel, BorderLayout.CENTER);
         
-        // Initial employee info update
         if (empleados.size() > 0) {
             actualizarInfoEmpleado();
         }
@@ -140,13 +105,9 @@ public class ReporteInteligenteWindow extends JFrame {
         return panel;
     }
     
-    /**
-     * Creates the center panel with areas selection and results
-     */
     private JPanel createCenterPanel() {
         JPanel panel = new JPanel(new GridLayout(1, 2, 10, 0));
         
-        // Left panel - Areas selection
         JPanel areasPanel = new JPanel(new BorderLayout());
         areasPanel.setBorder(new TitledBorder("Áreas a Analizar"));
         
@@ -155,7 +116,7 @@ public class ReporteInteligenteWindow extends JFrame {
         
         for (Area area : areas) {
             JCheckBox checkbox = new JCheckBox(area.getNombre());
-            checkbox.setSelected(true); // Select all by default
+            checkbox.setSelected(true);
             areaCheckboxes.add(checkbox);
             
             JPanel itemPanel = new JPanel(new BorderLayout());
@@ -176,7 +137,6 @@ public class ReporteInteligenteWindow extends JFrame {
         JScrollPane scrollAreas = new JScrollPane(checkboxPanel);
         areasPanel.add(scrollAreas, BorderLayout.CENTER);
         
-        // Right panel - Results
         JPanel resultsPanel = new JPanel(new BorderLayout());
         resultsPanel.setBorder(new TitledBorder("Resultado del Análisis"));
         
@@ -188,7 +148,6 @@ public class ReporteInteligenteWindow extends JFrame {
         JScrollPane scrollResultado = new JScrollPane(areaResultado);
         resultsPanel.add(scrollResultado, BorderLayout.CENTER);
         
-        // Loading indicator
         lblLoading = new JLabel("⏱ Procesando...", SwingConstants.CENTER);
         lblLoading.setFont(new Font("SansSerif", Font.BOLD, 14));
         lblLoading.setForeground(new Color(0, 100, 200));
@@ -201,9 +160,6 @@ public class ReporteInteligenteWindow extends JFrame {
         return panel;
     }
     
-    /**
-     * Creates the bottom panel with action buttons
-     */
     private JPanel createBottomPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
         
@@ -234,9 +190,6 @@ public class ReporteInteligenteWindow extends JFrame {
         return panel;
     }
     
-    /**
-     * Updates the employee information display
-     */
     private void actualizarInfoEmpleado() {
         int selectedIndex = comboEmpleados.getSelectedIndex();
         if (selectedIndex >= 0 && selectedIndex < empleados.size()) {
@@ -264,9 +217,6 @@ public class ReporteInteligenteWindow extends JFrame {
         }
     }
     
-    /**
-     * Generates the intelligent report using Gemini API
-     */
     private void generarReporte() {
         int selectedIndex = comboEmpleados.getSelectedIndex();
         if (selectedIndex < 0 || selectedIndex >= empleados.size()) {
@@ -277,7 +227,6 @@ public class ReporteInteligenteWindow extends JFrame {
             return;
         }
         
-        // Get selected areas
         List<Area> areasSeleccionadas = new ArrayList<>();
         for (int i = 0; i < areaCheckboxes.size(); i++) {
             if (areaCheckboxes.get(i).isSelected()) {
@@ -295,13 +244,11 @@ public class ReporteInteligenteWindow extends JFrame {
         
         Empleado empleadoSeleccionado = empleados.get(selectedIndex);
         
-        // Disable buttons and show loading indicator
         btnGenerar.setEnabled(false);
         btnGuardar.setEnabled(false);
         lblLoading.setVisible(true);
         areaResultado.setText("Generando reporte...\n\nEsto puede tomar unos segundos...");
         
-        // Generate report in a background thread to avoid freezing UI
         SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
             @Override
             protected String doInBackground() throws Exception {
@@ -313,7 +260,7 @@ public class ReporteInteligenteWindow extends JFrame {
                 try {
                     String resultado = get();
                     areaResultado.setText(resultado);
-                    areaResultado.setCaretPosition(0); // Scroll to top
+                    areaResultado.setCaretPosition(0);
                     btnGuardar.setEnabled(true);
                 } catch (Exception e) {
                     areaResultado.setText("Error al generar el reporte: " + e.getMessage());
@@ -327,9 +274,6 @@ public class ReporteInteligenteWindow extends JFrame {
         worker.execute();
     }
     
-    /**
-     * Saves the report to a text file
-     */
     private void guardarReporte() {
         String contenido = areaResultado.getText();
         if (contenido == null || contenido.trim().isEmpty()) {
@@ -364,15 +308,10 @@ public class ReporteInteligenteWindow extends JFrame {
         }
     }
     
-    /**
-     * Main method for testing the window
-     */
     public static void main(String[] args) {
-        // Create test data
         List<Empleado> empleados = new ArrayList<>();
         List<Area> areas = new ArrayList<>();
         
-        // Create test areas
         Area area1 = new Area(1, "Desarrollo", "Área de desarrollo de software", 500000, new Empleado[0]);
         Area area2 = new Area(2, "Marketing", "Área de marketing y ventas", 300000, new Empleado[0]);
         Area area3 = new Area(3, "Recursos Humanos", "Área de gestión de personal", 250000, new Empleado[0]);
@@ -380,7 +319,6 @@ public class ReporteInteligenteWindow extends JFrame {
         areas.add(area2);
         areas.add(area3);
         
-        // Create test employees
         Empleado emp1 = new Empleado(1001, "Juan", "Pérez", "12345678", "555-1234", 
                                       "/ruta/cv1.txt", 5, 50000.0, null, area1);
         Empleado emp2 = new Empleado(1002, "María", "González", "87654321", "555-5678",
@@ -388,7 +326,6 @@ public class ReporteInteligenteWindow extends JFrame {
         empleados.add(emp1);
         empleados.add(emp2);
         
-        // Launch window
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {

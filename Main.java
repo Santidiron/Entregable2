@@ -5,7 +5,6 @@ import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
-        // Configurar Look and Feel nativo del sistema (mejor para Windows)
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {

@@ -18,7 +18,6 @@ public class CVViewDialog extends JDialog {
     private void initComponents() {
         setLayout(new BorderLayout(10, 10));
 
-        // Panel de información del empleado
         JPanel panelInfo = new JPanel(new GridLayout(1, 4, 10, 5));
         panelInfo.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
@@ -27,7 +26,6 @@ public class CVViewDialog extends JDialog {
         panelInfo.add(new JLabel("Cédula: " + empleado.getCedula()));
         panelInfo.add(new JLabel("Archivo: " + empleado.getPathCV()));
 
-        // Área de texto para el CV
         JTextArea textArea = new JTextArea(contenidoCV);
         textArea.setEditable(false);
         textArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
@@ -38,14 +36,12 @@ public class CVViewDialog extends JDialog {
         JScrollPane scrollPane = new JScrollPane(textArea);
         scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
 
-        // Botón cerrar
         JPanel panelBoton = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         panelBoton.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
         JButton btnCerrar = new JButton("Cerrar");
         btnCerrar.addActionListener(e -> dispose());
         panelBoton.add(btnCerrar);
 
-        // Agregar componentes
         add(panelInfo, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
         add(panelBoton, BorderLayout.SOUTH);

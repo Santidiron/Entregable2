@@ -9,7 +9,6 @@ import java.util.List;
 
 public class ReporteEstadoAreas extends JFrame {
 
-    // Clase interna para botones con bordes redondeados (compatible con Windows)
     private static class RoundedButton extends JButton {
         private Color backgroundColor;
 
@@ -59,11 +58,9 @@ public class ReporteEstadoAreas extends JFrame {
         this.sistema = sistema;
         this.areasDataMap = new HashMap<>();
 
-        // Configurar Look and Feel nativo del sistema (mejor para Windows)
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
-            // Si falla, usa el Look and Feel por defecto
         }
 
         initComponents();
@@ -75,11 +72,9 @@ public class ReporteEstadoAreas extends JFrame {
         setLayout(new BorderLayout(10, 10));
         setSize(1000, 650);
 
-        // Panel principal con dos columnas
         JPanel mainPanel = new JPanel(new GridLayout(1, 2, 10, 0));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // === IZQUIERDA: Lista de áreas ===
         JPanel leftPanel = new JPanel(new BorderLayout());
         leftPanel.setBorder(BorderFactory.createTitledBorder("Áreas"));
         leftPanel.setPreferredSize(new Dimension(250, 0));
@@ -90,7 +85,6 @@ public class ReporteEstadoAreas extends JFrame {
         areasList.setCellRenderer(new AreaCellRenderer());
         areasList.setFont(new Font("Arial", Font.PLAIN, 14));
 
-        // Listener para selección de área
         areasList.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 String selectedArea = areasList.getSelectedValue();
@@ -103,17 +97,14 @@ public class ReporteEstadoAreas extends JFrame {
         JScrollPane areasScrollPane = new JScrollPane(areasList);
         leftPanel.add(areasScrollPane, BorderLayout.CENTER);
 
-        // === DERECHA: Grilla de empleados + Etiqueta abajo ===
         JPanel rightPanel = new JPanel(new BorderLayout(5, 5));
         rightPanel.setBorder(BorderFactory.createTitledBorder("Empleados"));
 
-        // Panel de empleados - ARRIBA (layout se configura dinámicamente)
         empleadosPanel = new JPanel();
         empleadosPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         JScrollPane empleadosScrollPane = new JScrollPane(empleadosPanel);
         rightPanel.add(empleadosScrollPane, BorderLayout.CENTER);
 
-        // Etiqueta con información del área - ABAJO
         lblAreaInfo = new JLabel("Seleccione un área para ver sus empleados", SwingConstants.CENTER);
         lblAreaInfo.setFont(new Font("Arial", Font.BOLD, 13));
         lblAreaInfo.setBorder(BorderFactory.createCompoundBorder(
@@ -124,13 +115,11 @@ public class ReporteEstadoAreas extends JFrame {
         lblAreaInfo.setBackground(new Color(240, 240, 240));
         rightPanel.add(lblAreaInfo, BorderLayout.SOUTH);
 
-        // Agregar paneles al panel principal
         mainPanel.add(leftPanel);
         mainPanel.add(rightPanel);
 
         add(mainPanel, BorderLayout.CENTER);
 
-        // Cargar datos
         loadAreas();
 
         setLocationRelativeTo(null);
@@ -140,7 +129,6 @@ public class ReporteEstadoAreas extends JFrame {
         areasListModel.clear();
         areasDataMap.clear();
 
-        // Crear lista para ordenar por porcentaje
         List<AreaData> areaDataList = new ArrayList<>();
 
         for (Area area : sistema.getAreas()) {
@@ -159,10 +147,8 @@ public class ReporteEstadoAreas extends JFrame {
             }
         }
 
-        // Ordenar por porcentaje DECRECIENTE
         areaDataList.sort((a, b) -> Double.compare(b.porcentaje, a.porcentaje));
 
-        // Agregar a la lista
         for (AreaData ad : areaDataList) {
             areasListModel.addElement(ad.area.getNombre());
         }
@@ -177,11 +163,9 @@ public class ReporteEstadoAreas extends JFrame {
 
         Area area = areaData.area;
 
-        // Actualizar etiqueta con información del área
         lblAreaInfo.setText(String.format("Área seleccionada: %s — Presupuesto asignado: %.2f%%",
             area.getNombre(), areaData.porcentaje));
 
-        // Obtener empleados del área
         List<Empleado> empleadosList = new ArrayList<>();
         for (Empleado emp : sistema.getEmpleados()) {
             if (emp != null && emp.getArea() != null && emp.getArea().getId() == area.getId()) {
@@ -190,10 +174,8 @@ public class ReporteEstadoAreas extends JFrame {
         }
 
         if (!empleadosList.isEmpty()) {
-            // Ordenar empleados alfabéticamente por nombre
             empleadosList.sort((a, b) -> a.getNombre().compareToIgnoreCase(b.getNombre()));
 
-            // Calcular rango de salarios para colorear (escala negro a azul)
             double minSalario = empleadosList.stream()
                 .mapToDouble(Empleado::getSalarioMensual)
                 .min().orElse(0);
@@ -201,9 +183,8 @@ public class ReporteEstadoAreas extends JFrame {
                 .mapToDouble(Empleado::getSalarioMensual)
                 .max().orElse(1);
 
-            // Configurar GridBagConstraints para control total del espaciado
             GridBagConstraints gbc = new GridBagConstraints();
-            gbc.insets = new Insets(3, 3, 3, 3); // Espaciado mínimo: 3px en todos lados
+            gbc.insets = new Insets(3, 3, 3, 3);
             gbc.anchor = GridBagConstraints.NORTHWEST;
             gbc.fill = GridBagConstraints.NONE;
 
@@ -211,31 +192,25 @@ public class ReporteEstadoAreas extends JFrame {
             int columna = 0;
 
             for (Empleado emp : empleadosList) {
-                // Crear botón con bordes redondeados
                 RoundedButton btnEmpleado = new RoundedButton(emp.getNombre());
                 btnEmpleado.setPreferredSize(new Dimension(160, 45));
                 btnEmpleado.setFont(new Font("Arial", Font.PLAIN, 12));
 
-                // Calcular color en escala negro (mínimo) a azul (máximo)
                 double ratio = (maxSalario > minSalario) ?
                     (emp.getSalarioMensual() - minSalario) / (maxSalario - minSalario) : 0.5;
 
-                // Escala de negro (0,0,0) a azul (0,0,255)
                 int blue = (int) (ratio * 255);
 
                 btnEmpleado.setBackground(new Color(0, 0, blue));
                 btnEmpleado.setForeground(Color.WHITE);
                 btnEmpleado.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-                // Agregar listener para mostrar detalles
                 btnEmpleado.addActionListener(e -> mostrarDetallesEmpleado(emp));
 
-                // Posicionar en la grilla
                 gbc.gridx = columna;
                 gbc.gridy = fila;
                 empleadosPanel.add(btnEmpleado, gbc);
 
-                // Avanzar a la siguiente columna, máximo 3 por fila
                 columna++;
                 if (columna >= 3) {
                     columna = 0;
@@ -243,7 +218,6 @@ public class ReporteEstadoAreas extends JFrame {
                 }
             }
 
-            // Agregar componente invisible al final para empujar todo hacia arriba
             gbc.gridx = 0;
             gbc.gridy = fila + 1;
             gbc.weighty = 1.0;
@@ -262,10 +236,9 @@ public class ReporteEstadoAreas extends JFrame {
 
     private double calcularPresupuestoUsado(Area area) {
         double total = 0;
-        // Obtener empleados del área desde el sistema
         for (Empleado emp : sistema.getEmpleados()) {
             if (emp != null && emp.getArea() != null && emp.getArea().getId() == area.getId()) {
-                total += emp.getSalarioMensual() * 12; // Salario anual
+                total += emp.getSalarioMensual() * 12;
             }
         }
         return total;
@@ -307,14 +280,12 @@ public class ReporteEstadoAreas extends JFrame {
         );
     }
 
-    // Clase auxiliar para almacenar datos de área
     private static class AreaData {
         Area area;
         double presupuestoUsado;
         double porcentaje;
     }
 
-    // Renderer personalizado para la lista de áreas (con colores según porcentaje)
     private class AreaCellRenderer extends DefaultListCellRenderer {
         @Override
         public Component getListCellRendererComponent(JList<?> list, Object value,
@@ -333,7 +304,6 @@ public class ReporteEstadoAreas extends JFrame {
                 if (areaData != null) {
                     double porcentaje = areaData.porcentaje;
 
-                    // Aplicar colores según el porcentaje
                     if (porcentaje > 90) {
                         label.setBackground(Color.RED);
                         label.setForeground(Color.WHITE);
@@ -352,10 +322,8 @@ public class ReporteEstadoAreas extends JFrame {
         }
     }
 
-    // Método main para pruebas
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            // Crear datos de prueba
             Sistema sistema = createTestData();
 
             ReporteEstadoAreas frame = new ReporteEstadoAreas(sistema);
@@ -366,7 +334,6 @@ public class ReporteEstadoAreas extends JFrame {
     private static Sistema createTestData() {
         Sistema sistema = new Sistema();
 
-        // Crear áreas
         Area areaIT = new Area(1, "Tecnología", "Área de desarrollo y sistemas", 400000, null);
         Area areaVentas = new Area(2, "Ventas", "Área comercial", 200000, null);
         Area areaRRHH = new Area(3, "Recursos Humanos", "Área de gestión de personal", 180000, null);
@@ -375,7 +342,6 @@ public class ReporteEstadoAreas extends JFrame {
         sistema.agregarArea(areaVentas);
         sistema.agregarArea(areaRRHH);
 
-        // Crear managers
         Manager manager1 = new Manager("Juan Pérez", "1.234.567-8", "099-000-001", 5, areaIT, null);
         Manager manager2 = new Manager("María García", "2.345.678-9", "099-000-002", 8, areaVentas, null);
         Manager manager3 = new Manager("Carlos López", "3.456.789-0", "099-000-003", 3, areaRRHH, null);
@@ -384,20 +350,17 @@ public class ReporteEstadoAreas extends JFrame {
         sistema.agregarManager(manager2);
         sistema.agregarManager(manager3);
 
-        // Crear empleados para Área 1 - IT
         sistema.agregarEmpleado(new Empleado(1001, "Ana", "Martínez", "4.567.890-1", "099-111-001", null, 2, 5000, manager1, areaIT));
         sistema.agregarEmpleado(new Empleado(1002, "Pedro", "Sánchez", "5.678.901-2", "099-111-002", null, 4, 6500, manager1, areaIT));
         sistema.agregarEmpleado(new Empleado(1003, "Laura", "Rodríguez", "6.789.012-3", "099-111-003", null, 1, 4500, manager1, areaIT));
         sistema.agregarEmpleado(new Empleado(1004, "Diego", "Fernández", "7.890.123-4", "099-111-004", null, 6, 7500, manager1, areaIT));
         sistema.agregarEmpleado(new Empleado(1005, "Sofia", "González", "8.901.234-5", "099-111-005", null, 3, 5500, manager1, areaIT));
 
-        // Crear empleados para Área 2 - Ventas
         sistema.agregarEmpleado(new Empleado(2001, "Roberto", "Díaz", "9.012.345-6", "099-222-001", null, 5, 4000, manager2, areaVentas));
         sistema.agregarEmpleado(new Empleado(2002, "Carmen", "Torres", "1.023.456-7", "099-222-002", null, 2, 3500, manager2, areaVentas));
         sistema.agregarEmpleado(new Empleado(2003, "Miguel", "Ramírez", "1.234.560-8", "099-222-003", null, 7, 5000, manager2, areaVentas));
         sistema.agregarEmpleado(new Empleado(2004, "Elena", "Castro", "2.345.601-9", "099-222-004", null, 1, 3000, manager2, areaVentas));
 
-        // Crear empleados para Área 3 - RRHH
         sistema.agregarEmpleado(new Empleado(3001, "Fernando", "Morales", "3.456.012-0", "099-333-001", null, 4, 4200, manager3, areaRRHH));
         sistema.agregarEmpleado(new Empleado(3002, "Patricia", "Vega", "4.560.123-1", "099-333-002", null, 6, 4800, manager3, areaRRHH));
         sistema.agregarEmpleado(new Empleado(3003, "Javier", "Ruiz", "5.601.234-2", "099-333-003", null, 2, 3800, manager3, areaRRHH));

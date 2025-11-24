@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Entregable2" default="default" basedir=".">
+    <description>Sistema ERP - Gestión de Personal</description>
+
+    <property name="src.dir" value="."/>
+    <property name="build.dir" value="build"/>
+    <property name="build.classes.dir" value="${build.dir}/classes"/>
+    <property name="dist.dir" value="dist"/>
+    <property name="dist.jar" value="${dist.dir}/Entregable2.jar"/>
+    <property name="main.class" value="Main"/>
+
+    <!-- Las API Keys deben configurarse como variables de entorno del sistema -->
+    <!-- NO almacenar API Keys en el código por seguridad -->
+    <property environment="env"/>
+    <property name="api.key.erp" value="${env.ERP_API_KEY}"/>
+    <property name="api.key.gemini" value="${env.GEMINI_API_KEY}"/>
+
+    <target name="init">
+        <mkdir dir="${build.classes.dir}"/>
+        <mkdir dir="${dist.dir}"/>
+    </target>
+
+    <target name="compile" depends="init" description="Compilar el código fuente">
+        <javac srcdir="${src.dir}"
+               destdir="${build.classes.dir}"
+               includeantruntime="false"
+               source="11"
+               target="11"
+               encoding="UTF-8">
+            <include name="**/*.java"/>
+        </javac>
+    </target>
+
+    <target name="jar" depends="compile" description="Crear JAR ejecutable">
+        <jar destfile="${dist.jar}" basedir="${build.classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${main.class}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="run" depends="compile" description="Ejecutar la aplicación">
+        <java classname="${main.class}" fork="true" failonerror="true">
+            <classpath>
+                <pathelement path="${build.classes.dir}"/>
+            </classpath>
+            <sysproperty key="ERP_API_KEY" value="${api.key.erp}"/>
+            <sysproperty key="GEMINI_API_KEY" value="${api.key.gemini}"/>
+        </java>
+    </target>
+
+    <target name="clean" description="Limpiar archivos compilados">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+
+    <target name="clean-build" depends="clean,jar" description="Limpiar y reconstruir"/>
+
+    <target name="default" depends="compile" description="Compilar el proyecto"/>
+</project>
+

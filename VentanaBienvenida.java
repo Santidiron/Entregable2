@@ -4,11 +4,6 @@
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * Ventana de bienvenida (Splash Screen) que se muestra al iniciar la aplicación.
- * Muestra el logo, los nombres y números de estudiante de los autores.
- * Después de 3-5 segundos, pregunta cómo iniciar el sistema.
- */
 public class VentanaBienvenida extends JFrame {
     private Sistema sistema;
 
@@ -34,13 +29,11 @@ public class VentanaBienvenida extends JFrame {
         panelPrincipal.setBackground(new Color(41, 128, 185));
         panelPrincipal.setBorder(BorderFactory.createLineBorder(new Color(52, 73, 94), 3));
 
-        // Panel central con logo y texto
         JPanel panelCentro = new JPanel();
         panelCentro.setLayout(new BoxLayout(panelCentro, BoxLayout.Y_AXIS));
         panelCentro.setBackground(new Color(41, 128, 185));
         panelCentro.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
 
-        // Logo (placeholder)
         JLabel labelLogo = new JLabel("📊");
         labelLogo.setFont(new Font("Dialog", Font.PLAIN, 100));
         labelLogo.setForeground(Color.WHITE);
@@ -49,7 +42,6 @@ public class VentanaBienvenida extends JFrame {
 
         panelCentro.add(Box.createRigidArea(new Dimension(0, 30)));
 
-        // Título
         JLabel labelTitulo = new JLabel("Sistema de Gestión de Empleados");
         labelTitulo.setFont(new Font("Arial", Font.BOLD, 24));
         labelTitulo.setForeground(Color.WHITE);
@@ -58,7 +50,6 @@ public class VentanaBienvenida extends JFrame {
 
         panelCentro.add(Box.createRigidArea(new Dimension(0, 50)));
 
-        // Autores
         JLabel labelAutores = new JLabel("Desarrollado por:");
         labelAutores.setFont(new Font("Arial", Font.PLAIN, 14));
         labelAutores.setForeground(Color.WHITE);
@@ -112,19 +103,19 @@ public class VentanaBienvenida extends JFrame {
         );
 
         switch (opcion) {
-            case 0: // Sistema nuevo vacío
+            case 0:
                 abrirVentanaPrincipal();
                 break;
 
-            case 1: // Cargar sistema guardado
+            case 1:
                 cargarSistemaGuardado();
                 break;
 
-            case 2: // Datos ficticios precargados
+            case 2:
                 cargarDatosPrecargados();
                 break;
 
-            default: // Usuario cerró el diálogo
+            default:
                 System.exit(0);
                 break;
         }

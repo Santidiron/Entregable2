@@ -13,70 +13,35 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-/**
- * Service class for integrating with Google's Gemini API.
- * Provides functionality to generate intelligent reports about employee area transitions.
- * 
- * This service handles:
- * - API authentication via environment variable GEMINI_API_KEY
- * - HTTP communication with Gemini Pro model
- * - Prompt construction with employee and area data
- * - JSON response parsing
- * - Error handling and fallback mechanisms
- * 
- * @author Diego Rocabado
- * @author Santiago Dirón
- */
 public class GeminiService {
     
-    // ✅ Modelos CORRECTOS disponibles en plan gratuito (API v1 - 2024)
-    // NO usar sufijos -latest (ya no existen)
-    private static final String MODEL_FLASH_2_0 = "gemini-2.0-flash";      // ⚡ Más rápido, recomendado
-    private static final String MODEL_PRO_2_0 = "gemini-2.0-pro";          // 🎯 Más preciso
-    private static final String MODEL_FLASH_1_5 = "gemini-1.5-flash";      // ✅ Estable
-    private static final String MODEL_PRO_1_5 = "gemini-1.5-pro";          // ✅ Estable
+    private static final String MODEL_FLASH_2_0 = "gemini-2.0-flash";
+    private static final String MODEL_PRO_2_0 = "gemini-2.0-pro";
+    private static final String MODEL_FLASH_1_5 = "gemini-1.5-flash";
+    private static final String MODEL_PRO_1_5 = "gemini-1.5-pro";
 
-    // ✅ URL CORRECTA: API v1 (NO v1beta)
-    private static final String GEMINI_API_BASE = "https://generativelanguage.googleapis.com/v1/models/";
+    private static final String GEMINI_API_BASE = "https://generativelanguage.googleapis.com/v1beta/models/";
 
-    // Usar gemini-2.0-flash (el más rápido y disponible)
     private static final String GEMINI_API_ENDPOINT = GEMINI_API_BASE + MODEL_FLASH_2_0 + ":generateContent";
 
-    private static final int TIMEOUT_MS = 30000; // 30 seconds timeout
-    private static final int MAX_RETRIES = 3; // Reintentos en caso de error temporal
+    private static final int TIMEOUT_MS = 30000;
+    private static final int MAX_RETRIES = 3;
 
     private String apiKey;
     
-    /**
-     * Constructor that reads API key from environment variable ERP_API_KEY
-     * IMPORTANTE: Por seguridad, la API KEY NO debe estar en el código.
-     * Debe configurarse como variable de entorno ERP_API_KEY
-     * También acepta GEMINI_API_KEY como fallback
-     */
     public GeminiService() {
-        // Leer API Key desde variable de entorno ERP_API_KEY (según requisito)
         this.apiKey = System.getenv("ERP_API_KEY");
 
-        // Fallback a GEMINI_API_KEY si ERP_API_KEY no está configurada
         if (this.apiKey == null || this.apiKey.trim().isEmpty()) {
             this.apiKey = System.getenv("GEMINI_API_KEY");
         }
     }
     
-    /**
-     * Generates an intelligent report analyzing the advantages and disadvantages
-     * of moving an employee to different areas
-     * 
-     * @param empleado The employee to analyze
-     * @param areas List of areas to consider for the analysis
-     * @return Analysis result as a string, or fallback message if API fails
-     */
     public String generarReporteInteligente(Empleado empleado, List<Area> areas) {
-        // Check if API key is available
         if (apiKey == null || apiKey.trim().isEmpty()) {
             String mensaje = "API Key no configurada.\n\n" +
                            "Para habilitar la integración con IA de Google Gemini:\n" +
-                           "1. Ve a https://aistudio.google.com/\n" +
+                           "1. Ve a https://aistudio.google.com/app/apikey\n" +
                            "2. Obtén tu API Key gratuita\n" +
                            "3. Edita GeminiService.java y configura DEFAULT_API_KEY\n" +
                            "   O configura la variable de entorno ERP_API_KEY\n\n" +
@@ -85,20 +50,16 @@ public class GeminiService {
         }
         
         try {
-            // Build the prompt
             String prompt = construirPrompt(empleado, areas);
             
-            // Make the API request
             String response = hacerRequestAPI(prompt);
             
-            // Parse the response
             return parsearRespuesta(response);
             
         } catch (SocketTimeoutException e) {
             return generarFallbackReport(empleado, areas, "Timeout: La API de Gemini no respondió a tiempo.");
         } catch (IOException e) {
             String mensaje = e.getMessage();
-            // Detectar error de cuota excedida (429)
             if (mensaje != null && mensaje.contains("429")) {
                 return generarFallbackReport(empleado, areas,
                     "⚠️ LÍMITE DE CUOTA EXCEDIDO (Error 429)\n\n" +
@@ -110,8 +71,24 @@ public class GeminiService {
                     "💡 Soluciones:\n" +
                     "1. Espera unos segundos y vuelve a intentar\n" +
                     "2. Usa el reporte básico (modo fallback actual)\n" +
-                    "3. Consulta tu uso en: https://ai.google.dev/gemini-api/docs/quota\n\n" +
+                    "3. Consulta tu uso en: https://aistudio.google.com/app/apikey\n\n" +
                     "El sistema continúa funcionando normalmente en modo básico.");
+            } else if (mensaje != null && mensaje.contains("403")) {
+                return generarFallbackReport(empleado, areas,
+                    "🔒 API KEY BLOQUEADA O INVÁLIDA (Error 403)\n\n" +
+                    "La API Key actual ha sido deshabilitada por seguridad.\n\n" +
+                    "Posibles causas:\n" +
+                    "• La API Key fue reportada como filtrada\n" +
+                    "• La API Key es inválida o ha expirado\n" +
+                    "• No tienes permisos para usar esta API\n\n" +
+                    "🔑 SOLUCIÓN INMEDIATA:\n" +
+                    "1. Ve a: https://aistudio.google.com/app/apikey\n" +
+                    "2. CREA UNA NUEVA API KEY (la actual está bloqueada)\n" +
+                    "3. Configura la nueva API Key usando uno de estos métodos:\n" +
+                    "   • Variable de entorno: ERP_API_KEY o GEMINI_API_KEY\n" +
+                    "   • Ejecuta: configurar_api_key.bat (si existe)\n\n" +
+                    "⚠️ IMPORTANTE: NO compartas tu API Key en repositorios públicos.\n\n" +
+                    "El sistema continúa funcionando en modo básico.");
             }
             return generarFallbackReport(empleado, areas, "Error de conexión: " + e.getMessage());
         } catch (Exception e) {
@@ -119,15 +96,11 @@ public class GeminiService {
         }
     }
     
-    /**
-     * Constructs the prompt to send to Gemini API
-     */
     private String construirPrompt(Empleado empleado, List<Area> areas) throws IOException {
         StringBuilder prompt = new StringBuilder();
         
         prompt.append("Eres un consultor experto en recursos humanos. Analiza la siguiente información y proporciona un análisis detallado.\n\n");
         
-        // Employee information
         prompt.append("INFORMACIÓN DEL EMPLEADO:\n");
         prompt.append("Nombre: ").append(empleado.getNombre()).append(" ").append(empleado.getApellido()).append("\n");
         prompt.append("Legajo: ").append(empleado.getLegajo()).append("\n");
@@ -139,7 +112,6 @@ public class GeminiService {
             prompt.append("Área actual: ").append(empleado.getArea().getNombre()).append("\n");
         }
         
-        // CV content
         prompt.append("\nCONTENIDO DEL CV:\n");
         if (empleado.getPathCV() != null && !empleado.getPathCV().isEmpty()) {
             try {
@@ -152,14 +124,12 @@ public class GeminiService {
             prompt.append("(No se ha especificado un CV para este empleado)\n");
         }
         
-        // Available areas
         prompt.append("\nÁREAS DISPONIBLES PARA ANÁLISIS:\n");
         for (Area area : areas) {
             prompt.append("- ").append(area.getNombre()).append(": ").append(area.getDescripcion()).append("\n");
             prompt.append("  Presupuesto anual: $").append(area.getPresupuestoAnual()).append("\n");
         }
         
-        // The question
         prompt.append("\nPREGUNTA:\n");
         prompt.append("¿Cuáles son las ventajas y desventajas de mover a este empleado a cada una de las áreas mencionadas? ");
         prompt.append("Por favor, proporciona un análisis detallado para cada área, considerando:\n");
@@ -172,48 +142,36 @@ public class GeminiService {
         return prompt.toString();
     }
     
-    /**
-     * Reads the CV file content
-     */
     private String leerContenidoCV(String pathCV) throws IOException {
         try {
             List<String> lines = Files.readAllLines(Paths.get(pathCV), StandardCharsets.UTF_8);
             return String.join("\n", lines);
         } catch (Exception e) {
-            // If absolute path fails, try relative path
             List<String> lines = Files.readAllLines(Paths.get("." + pathCV), StandardCharsets.UTF_8);
             return String.join("\n", lines);
         }
     }
     
-    /**
-     * Makes the HTTP POST request to Gemini API
-     */
     private String hacerRequestAPI(String prompt) throws IOException {
         URL url = new URL(GEMINI_API_ENDPOINT + "?key=" + apiKey);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         
         try {
-            // Configure connection
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setConnectTimeout(TIMEOUT_MS);
             connection.setReadTimeout(TIMEOUT_MS);
             connection.setDoOutput(true);
             
-            // Build JSON request body
             String jsonRequest = construirJSONRequest(prompt);
             
-            // Send request
             try (OutputStream os = connection.getOutputStream()) {
                 byte[] input = jsonRequest.getBytes(StandardCharsets.UTF_8);
                 os.write(input, 0, input.length);
             }
             
-            // Read response
             int responseCode = connection.getResponseCode();
             if (responseCode != 200) {
-                // Try to read error message
                 String errorMsg = "";
                 try (BufferedReader br = new BufferedReader(
                         new InputStreamReader(connection.getErrorStream(), StandardCharsets.UTF_8))) {
@@ -244,11 +202,7 @@ public class GeminiService {
         }
     }
     
-    /**
-     * Constructs the JSON request body for Gemini API
-     */
     private String construirJSONRequest(String prompt) {
-        // Escape special characters in prompt
         String escapedPrompt = prompt.replace("\\", "\\\\")
                                      .replace("\"", "\\\"")
                                      .replace("\n", "\\n")
@@ -262,25 +216,18 @@ public class GeminiService {
             + "}";
     }
     
-    /**
-     * Parses the JSON response from Gemini API
-     */
     private String parsearRespuesta(String jsonResponse) {
         try {
-            // Simple JSON parsing without external libraries
-            // Look for the "text" field in the response
             int textIndex = jsonResponse.indexOf("\"text\"");
             if (textIndex == -1) {
                 return "Error: No se pudo encontrar el texto en la respuesta de la API.";
             }
             
-            // Find the start of the text value
             int startQuote = jsonResponse.indexOf("\"", textIndex + 7);
             if (startQuote == -1) {
                 return "Error: Formato de respuesta inválido.";
             }
             
-            // Find the end of the text value (handle escaped quotes)
             int endQuote = startQuote + 1;
             while (endQuote < jsonResponse.length()) {
                 if (jsonResponse.charAt(endQuote) == '"' && jsonResponse.charAt(endQuote - 1) != '\\') {
@@ -295,7 +242,6 @@ public class GeminiService {
             
             String text = jsonResponse.substring(startQuote + 1, endQuote);
             
-            // Unescape the text
             text = text.replace("\\n", "\n")
                       .replace("\\r", "\r")
                       .replace("\\t", "\t")
@@ -309,9 +255,6 @@ public class GeminiService {
         }
     }
     
-    /**
-     * Generates a fallback report when the API is unavailable
-     */
     private String generarFallbackReport(Empleado empleado, List<Area> areas, String razonFallo) {
         StringBuilder fallback = new StringBuilder();
         
@@ -346,9 +289,6 @@ public class GeminiService {
         return fallback.toString();
     }
     
-    /**
-     * Checks if the API key is configured and valid
-     */
     public boolean isAPIKeyConfigured() {
         return apiKey != null && !apiKey.trim().isEmpty();
     }

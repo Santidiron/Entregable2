@@ -28,14 +28,12 @@ public class GestionManagersGUI extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout(10, 10));
         
-        // Panel superior con título
         JPanel panelTitulo = new JPanel();
         JLabel lblTitulo = new JLabel("Gestión de Managers");
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 20));
         panelTitulo.add(lblTitulo);
         add(panelTitulo, BorderLayout.NORTH);
         
-        // Panel central con tabla
         String[] columnas = {"Nombre", "Cédula", "Antigüedad", "Celular", "Cantidad Empleados a Cargo"};
         modeloTabla = new DefaultTableModel(columnas, 0) {
             @Override
@@ -48,7 +46,6 @@ public class GestionManagersGUI extends JFrame {
         JScrollPane scrollPane = new JScrollPane(tablaManagers);
         add(scrollPane, BorderLayout.CENTER);
         
-        // Panel inferior con botones
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         
         btnAgregar = new JButton("Agregar Manager");
@@ -75,7 +72,6 @@ public class GestionManagersGUI extends JFrame {
         modeloTabla.setRowCount(0);
         List<Manager> managers = sistema.getManagers();
         
-        // Ordenar por antigüedad descendente
         Collections.sort(managers, new Comparator<Manager>() {
             @Override
             public int compare(Manager m1, Manager m2) {
@@ -141,7 +137,6 @@ public class GestionManagersGUI extends JFrame {
         
         btnGuardar.addActionListener(e -> {
             try {
-                // Validar campos requeridos
                 if (txtNombre.getText().trim().isEmpty()) {
                     JOptionPane.showMessageDialog(dialogo, "El nombre es requerido", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
@@ -152,19 +147,16 @@ public class GestionManagersGUI extends JFrame {
                     return;
                 }
                 
-                // Validar formato de cédula
                 if (!sistema.validarFormatoCedula(txtCedula.getText().trim())) {
                     JOptionPane.showMessageDialog(dialogo, "Formato de cédula inválido. Use el formato: X.XXX.XXX-X o XXXXXXXX", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 
-                // Validar cédula única
                 if (!sistema.esCedulaUnica(txtCedula.getText().trim())) {
                     JOptionPane.showMessageDialog(dialogo, "La cédula ya existe en el sistema", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 
-                // Validar antigüedad
                 int antiguedad;
                 try {
                     antiguedad = Integer.parseInt(txtAntiguedad.getText().trim());
@@ -177,7 +169,6 @@ public class GestionManagersGUI extends JFrame {
                     return;
                 }
                 
-                // Validar celular
                 if (txtCelular.getText().trim().isEmpty()) {
                     JOptionPane.showMessageDialog(dialogo, "El celular es requerido", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
@@ -188,7 +179,6 @@ public class GestionManagersGUI extends JFrame {
                     return;
                 }
                 
-                // Obtener área seleccionada
                 String nombreArea = (String) cmbArea.getSelectedItem();
                 Area areaSeleccionada = null;
                 for (Area a : sistema.getAreas()) {
@@ -198,7 +188,6 @@ public class GestionManagersGUI extends JFrame {
                     }
                 }
                 
-                // Crear el manager
                 Manager nuevoManager = new Manager(
                     txtNombre.getText().trim(),
                     txtCedula.getText().trim(),
@@ -291,7 +280,6 @@ public class GestionManagersGUI extends JFrame {
         
         btnGuardar.addActionListener(e -> {
             try {
-                // Validar celular
                 if (txtCelular.getText().trim().isEmpty()) {
                     JOptionPane.showMessageDialog(dialogo, "El celular es requerido", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
@@ -302,7 +290,6 @@ public class GestionManagersGUI extends JFrame {
                     return;
                 }
                 
-                // Actualizar solo el celular
                 manager.setCelular(txtCelular.getText().trim());
                 
                 if (sistema.actualizarManager(manager)) {
@@ -342,7 +329,6 @@ public class GestionManagersGUI extends JFrame {
             return;
         }
         
-        // Verificar si tiene empleados a cargo
         int cantidadEmpleados = sistema.getCantidadEmpleadosACargo(manager);
         if (cantidadEmpleados > 0) {
             JOptionPane.showMessageDialog(this, 
@@ -352,7 +338,6 @@ public class GestionManagersGUI extends JFrame {
             return;
         }
         
-        // Confirmación
         int confirmacion = JOptionPane.showConfirmDialog(this, 
             "¿Está seguro que desea eliminar el manager " + manager.getNombre() + "?", 
             "Confirmar eliminación", 

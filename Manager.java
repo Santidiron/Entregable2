@@ -22,7 +22,6 @@ public class Manager implements Serializable {
         this.area = area;
         this.empleados = empleados;
     }
-    // Getters and Setters
     public String getNombre() {
         return nombre;
     }
