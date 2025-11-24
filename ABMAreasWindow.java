@@ -6,7 +6,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
-public class ABMAreasWindow extends JFrame {
+public class ABMAreasWindow extends JFrame
+{
     private Sistema sistema;
     private JTable tablaAreas;
     private DefaultTableModel modeloTabla;
@@ -14,7 +15,8 @@ public class ABMAreasWindow extends JFrame {
     private JTextArea txtDescripcion;
     private JTextField txtPresupuesto;
     
-    public ABMAreasWindow(Sistema sistema) {
+    public ABMAreasWindow(Sistema sistema)
+    {
         this.sistema = sistema;
         
         setTitle("ABM Áreas");
@@ -22,11 +24,11 @@ public class ABMAreasWindow extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
         
-        // Create main panel with padding
+        // panel principapl
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
-        // Create table for areas
+        //crear tablas
         String[] columnNames = {"ID", "Nombre", "Descripción", "Presupuesto"};
         modeloTabla = new DefaultTableModel(columnNames, 0) {
             @Override
@@ -37,14 +39,13 @@ public class ABMAreasWindow extends JFrame {
         tablaAreas = new JTable(modeloTabla);
         JScrollPane scrollPane = new JScrollPane(tablaAreas);
         
-        // Create form panel
+        // crea formulario
         JPanel formPanel = new JPanel(new GridBagLayout());
         formPanel.setBorder(BorderFactory.createTitledBorder("Datos del Área"));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        
-        // Name field
+
         gbc.gridx = 0;
         gbc.gridy = 0;
         formPanel.add(new JLabel("Nombre:"), gbc);
@@ -53,8 +54,7 @@ public class ABMAreasWindow extends JFrame {
         gbc.weightx = 1.0;
         txtNombre = new JTextField(20);
         formPanel.add(txtNombre, gbc);
-        
-        // Description field
+
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.weightx = 0;
@@ -67,8 +67,7 @@ public class ABMAreasWindow extends JFrame {
         txtDescripcion.setWrapStyleWord(true);
         JScrollPane descScrollPane = new JScrollPane(txtDescripcion);
         formPanel.add(descScrollPane, gbc);
-        
-        // Budget field
+
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.weightx = 0;
@@ -78,8 +77,7 @@ public class ABMAreasWindow extends JFrame {
         gbc.weightx = 1.0;
         txtPresupuesto = new JTextField(20);
         formPanel.add(txtPresupuesto, gbc);
-        
-        // Create button panel
+
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         
         JButton btnAgregar = new JButton("Agregar");
@@ -92,13 +90,12 @@ public class ABMAreasWindow extends JFrame {
         buttonPanel.add(btnEliminar);
         buttonPanel.add(btnMovimiento);
         
-        // Add action listeners
+        //eventos de votones
         btnAgregar.addActionListener(e -> agregarArea());
         btnModificar.addActionListener(e -> modificarArea());
         btnEliminar.addActionListener(e -> eliminarArea());
         btnMovimiento.addActionListener(e -> abrirDialogoMovimiento());
-        
-        // Layout components
+
         JPanel topPanel = new JPanel(new BorderLayout(10, 10));
         topPanel.add(formPanel, BorderLayout.NORTH);
         topPanel.add(buttonPanel, BorderLayout.SOUTH);
@@ -107,19 +104,19 @@ public class ABMAreasWindow extends JFrame {
         mainPanel.add(scrollPane, BorderLayout.CENTER);
         
         add(mainPanel);
-        
-        // Load initial data
+
         actualizarTabla();
     }
     
-    private void agregarArea() {
+    private void agregarArea()
+    {
         try {
             String nombre = txtNombre.getText().trim();
             String descripcion = txtDescripcion.getText().trim();
             String presupuestoStr = txtPresupuesto.getText().trim();
-            
-            // Validate input
-            if (nombre.isEmpty()) {
+
+            if (nombre.isEmpty())
+            {
                 JOptionPane.showMessageDialog(this, 
                     "El nombre es obligatorio", 
                     "Error de Validación", 
@@ -127,7 +124,8 @@ public class ABMAreasWindow extends JFrame {
                 return;
             }
             
-            if (presupuestoStr.isEmpty()) {
+            if (presupuestoStr.isEmpty())
+            {
                 JOptionPane.showMessageDialog(this, 
                     "El presupuesto es obligatorio", 
                     "Error de Validación", 
@@ -139,13 +137,16 @@ public class ABMAreasWindow extends JFrame {
             
             Area nuevaArea = sistema.agregarArea(nombre, descripcion, presupuesto);
             
-            if (nuevaArea == null) {
-                if (sistema.existeAreaConNombre(nombre)) {
+            if (nuevaArea == null)
+            {
+                if (sistema.existeAreaConNombre(nombre))
+                {
                     JOptionPane.showMessageDialog(this, 
                         "Ya existe un área con ese nombre", 
                         "Error de Validación", 
                         JOptionPane.ERROR_MESSAGE);
-                } else {
+                } else
+                {
                     JOptionPane.showMessageDialog(this, 
                         "El presupuesto debe ser mayor a 0", 
                         "Error de Validación", 
@@ -153,11 +154,9 @@ public class ABMAreasWindow extends JFrame {
                 }
                 return;
             }
-            
-            // Clear form
+
             limpiarFormulario();
-            
-            // Update table
+
             actualizarTabla();
             
             JOptionPane.showMessageDialog(this, 
@@ -165,7 +164,8 @@ public class ABMAreasWindow extends JFrame {
                 "Éxito", 
                 JOptionPane.INFORMATION_MESSAGE);
             
-        } catch (NumberFormatException ex) {
+        } catch (NumberFormatException ex)
+        {
             JOptionPane.showMessageDialog(this, 
                 "El presupuesto debe ser un número válido", 
                 "Error de Validación", 
@@ -173,9 +173,11 @@ public class ABMAreasWindow extends JFrame {
         }
     }
     
-    private void modificarArea() {
+    private void modificarArea()
+    {
         int selectedRow = tablaAreas.getSelectedRow();
-        if (selectedRow == -1) {
+        if (selectedRow == -1)
+        {
             JOptionPane.showMessageDialog(this, 
                 "Debe seleccionar un área de la tabla", 
                 "Error", 
@@ -186,7 +188,8 @@ public class ABMAreasWindow extends JFrame {
         int areaId = (int) modeloTabla.getValueAt(selectedRow, 0);
         Area area = sistema.buscarAreaPorId(areaId);
         
-        if (area == null) {
+        if (area == null)
+        {
             JOptionPane.showMessageDialog(this, 
                 "Área no encontrada", 
                 "Error", 
@@ -206,9 +209,11 @@ public class ABMAreasWindow extends JFrame {
             JOptionPane.INFORMATION_MESSAGE);
     }
     
-    private void eliminarArea() {
+    private void eliminarArea()
+    {
         int selectedRow = tablaAreas.getSelectedRow();
-        if (selectedRow == -1) {
+        if (selectedRow == -1)
+        {
             JOptionPane.showMessageDialog(this, 
                 "Debe seleccionar un área de la tabla", 
                 "Error", 
@@ -219,7 +224,8 @@ public class ABMAreasWindow extends JFrame {
         int areaId = (int) modeloTabla.getValueAt(selectedRow, 0);
         Area area = sistema.buscarAreaPorId(areaId);
         
-        if (area == null) {
+        if (area == null)
+        {
             JOptionPane.showMessageDialog(this, 
                 "Área no encontrada", 
                 "Error", 
@@ -232,13 +238,15 @@ public class ABMAreasWindow extends JFrame {
             "Confirmar Eliminación", 
             JOptionPane.YES_NO_OPTION);
         
-        if (confirmacion != JOptionPane.YES_OPTION) {
+        if (confirmacion != JOptionPane.YES_OPTION)
+        {
             return;
         }
         
         boolean eliminado = sistema.eliminarArea(area);
         
-        if (!eliminado) {
+        if (!eliminado)
+        {
             JOptionPane.showMessageDialog(this, 
                 "No se puede eliminar el área porque tiene empleados asignados", 
                 "Error", 
@@ -255,8 +263,10 @@ public class ABMAreasWindow extends JFrame {
             JOptionPane.INFORMATION_MESSAGE);
     }
     
-    private void abrirDialogoMovimiento() {
-        if (sistema.getEmpleados().isEmpty()) {
+    private void abrirDialogoMovimiento()
+    {
+        if (sistema.getEmpleados().isEmpty())
+        {
             JOptionPane.showMessageDialog(this, 
                 "No hay empleados registrados en el sistema", 
                 "Información", 
@@ -264,7 +274,8 @@ public class ABMAreasWindow extends JFrame {
             return;
         }
         
-        if (sistema.getAreas().size() < 2) {
+        if (sistema.getAreas().size() < 2)
+        {
             JOptionPane.showMessageDialog(this, 
                 "Se necesitan al menos 2 áreas para realizar un movimiento", 
                 "Información", 
@@ -274,20 +285,18 @@ public class ABMAreasWindow extends JFrame {
         
         MovimientoDialog dialog = new MovimientoDialog(this, sistema);
         dialog.setVisible(true);
-        
-        // Update table after dialog closes
+
         actualizarTabla();
     }
     
-    private void actualizarTabla() {
-        // Clear table
+    private void actualizarTabla()
+    {
         modeloTabla.setRowCount(0);
-        
-        // Get areas sorted by name
+
         List<Area> areas = sistema.getAreasSortedByName();
-        
-        // Add areas to table
-        for (Area area : areas) {
+
+        for (Area area : areas)
+        {
             Object[] row = {
                 area.getId(),
                 area.getNombre(),
@@ -298,7 +307,8 @@ public class ABMAreasWindow extends JFrame {
         }
     }
     
-    private void limpiarFormulario() {
+    private void limpiarFormulario()
+    {
         txtNombre.setText("");
         txtDescripcion.setText("");
         txtPresupuesto.setText("");

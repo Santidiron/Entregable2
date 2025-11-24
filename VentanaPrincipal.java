@@ -312,9 +312,7 @@ public class VentanaPrincipal extends JFrame {
 
         JMenuItem itemReporteEstadoAreas = new JMenuItem("Reporte de estado de áreas");
         itemReporteEstadoAreas.addActionListener(e -> {
-            ReporteEstadoAreas ventana = new ReporteEstadoAreas(
-                sistema.getAreas().toArray(new Area[0])
-            );
+            ReporteEstadoAreas ventana = new ReporteEstadoAreas(sistema);
             ventana.setVisible(true);
         });
 
